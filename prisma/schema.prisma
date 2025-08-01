@@ -25,14 +25,14 @@ model User {
   dailyLogs DailyLog[]
   tasks     Task[]
   moodEntries MoodEntry[]
-  dailyGoals  DailyGoal[]
+  dailyGoals  Goal[]
 }
 
 model DailyLog {
   id        String   @id @default(uuid())
   userId    String
   user      User     @relation(fields: [userId], references: [id])
-  date      DateTime @unique 
+  date      DateTime @db.Date
   content   String?  @db.Text 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -43,7 +43,7 @@ model Task {
   userId      String
   user        User      @relation(fields: [userId], references: [id])
   title       String
-  description String?
+  description String?   @db.Text
   dueDate     DateTime?
   isCompleted Boolean   @default(false)
   createdAt   DateTime  @default(now())
@@ -54,20 +54,46 @@ model MoodEntry {
   id          String   @id @default(uuid())
   userId      String
   user        User     @relation(fields: [userId], references: [id])
-  date        DateTime @unique 
+  date        DateTime 
   moodValue   Int      
   comment     String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
 
-model DailyGoal {
+model Goal {
   id        String   @id @default(uuid())
   userId    String
   user      User     @relation(fields: [userId], references: [id])
   date      DateTime @unique 
   goalText  String
   isAchieved Boolean @default(false) 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Weather{
+  id String @id @default(uuid())
+  date DateTime @db.Date
+
+  condition String
+  temperature Float
+  humidity Int
+  windSpeed Float
+
+  location String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model DailyQuote{
+  id String @id @default(uuid())
+  date DateTime @unique @db.Date
+
+  text String @db.Text
+  author String?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
