@@ -1,6 +1,14 @@
 import axios from "axios";
 
-axios.interceptors.response.use(
+const instance = axios.create({
+  baseURL: "/api",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  withCredentials: true,
+});
+
+instance.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
@@ -12,4 +20,4 @@ axios.interceptors.response.use(
   }
 );
 
-export default axios;
+export default instance;
