@@ -20,11 +20,8 @@ model User {
   name      String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
-
   dailyLogs DailyLog[]
   tasks     Task[]
-  moodEntries MoodEntry[]
   dailyGoals  Goal[]
 }
 model DailyLog {
@@ -33,6 +30,8 @@ model DailyLog {
   user      User     @relation(fields: [userId], references: [id])
   date      DateTime @db.Date
   content   String?  @db.Text 
+  mood      String?
+  moodComment String? @db.Text
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   @@unique([userId, date])
@@ -51,17 +50,6 @@ model Task {
   updatedAt   DateTime  @updatedAt
 }
 
-model MoodEntry {
-  id          String   @id @default(uuid())
-  userId      String
-  user        User     @relation(fields: [userId], references: [id])
-  date        DateTime 
-  mood        String      
-  comment     String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
 model Goal {
   id        String   @id @default(uuid())
   userId    String
@@ -76,14 +64,11 @@ model Goal {
 model Weather{
   id String @id @default(uuid())
   date DateTime @db.Date
-
   condition String
   temperature Float
   humidity Int
   windSpeed Float
-
   location String
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -91,10 +76,8 @@ model Weather{
 model DailyQuote{
   id String @id @default(uuid())
   date DateTime @unique @db.Date
-
   text String @db.Text
   author String?
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

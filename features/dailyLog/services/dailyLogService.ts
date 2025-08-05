@@ -1,5 +1,9 @@
 import instance from "@/utils/axios";
-import { DailyLog } from "../types";
+import {
+  CreateDailyLogRequest,
+  DailyLog,
+  UpdateDailyLogRequest,
+} from "../types";
 
 export const getDailyLog = async (): Promise<DailyLog[]> => {
   const response = await instance.get<DailyLog[]>("/dailylog");
@@ -11,21 +15,18 @@ export const getDailyLogByDate = async (date: string): Promise<DailyLog> => {
   return response.data;
 };
 
-export const createDailyLog = async (data: {
-  date: string;
-  content: string;
-}): Promise<DailyLog> => {
+export const createDailyLog = async (
+  data: CreateDailyLogRequest
+): Promise<DailyLog> => {
   const response = await instance.post<DailyLog>("/dailylog", data);
   return response.data;
 };
 
 export const updateDailyLog = async (
   date: string,
-  content: string
+  data: UpdateDailyLogRequest
 ): Promise<DailyLog> => {
-  const response = await instance.patch<DailyLog>(`/dailylog/${date}`, {
-    content,
-  });
+  const response = await instance.patch<DailyLog>(`/dailylog/${date}`, data);
   return response.data;
 };
 

@@ -66,30 +66,21 @@ export async function PATCH(
       );
     }
     const userId = user.userId;
-    const dateParam = params.date;
-    const { content } = await request.json();
-    if (content === undefined) {
-      return NextResponse.json(
-        { message: " Content is required for update " },
-        { status: 400 }
-      );
-    }
-    const date = new Date(dateParam);
-    if (isNaN(date.getTime())) {
-      return NextResponse.json(
-        { message: "Invalid date format in URL" },
-        { status: 400 }
-      );
-    }
+    const { content, mood, moodComment } = await request.json();
+    const date = params.date;
+
     const updatedDailyLog = await prisma.dailyLog.update({
       where: {
         userId_date: {
           userId: userId,
-          date: date,
+          date: new Date(date),
         },
       },
       data: {
         content: content,
+        mood: mood,
+        moodComment: moodComment,
+        updatedAt: new Date(),
       },
     });
     return NextResponse.json(updatedDailyLog);
@@ -99,8 +90,6 @@ export async function PATCH(
       { message: "Failed to update or daily log not found" },
       { status: 500 }
     );
-  } finally {
-    await prisma.$disconnect();
   }
 }
 
@@ -139,7 +128,5 @@ export async function DELETE(
       { message: "Failed to delete daily log or log not found" },
       { status: 500 }
     );
-  } finally {
-    await prisma.$disconnect();
   }
 }

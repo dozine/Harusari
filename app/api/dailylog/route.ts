@@ -41,7 +41,7 @@ export async function POST(request: Request) {
       );
     }
     const userId = user.userId;
-    const { date, content } = await request.json();
+    const { date, content, mood, moodComment } = await request.json();
     if (!date) {
       return NextResponse.json(
         {
@@ -56,6 +56,8 @@ export async function POST(request: Request) {
         userId: userId,
         date: dailyLogDate,
         content: content || "",
+        mood: mood || null,
+        moodComment: moodComment || null,
       },
     });
     return NextResponse.json(newDailyLog, { status: 201 });
