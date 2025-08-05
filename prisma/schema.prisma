@@ -27,7 +27,6 @@ model User {
   moodEntries MoodEntry[]
   dailyGoals  Goal[]
 }
-
 model DailyLog {
   id        String   @id @default(uuid())
   userId    String
@@ -36,7 +35,9 @@ model DailyLog {
   content   String?  @db.Text 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  @@unique([userId, date])
 }
+
 
 model Task {
   id          String    @id @default(uuid())
@@ -55,7 +56,7 @@ model MoodEntry {
   userId      String
   user        User     @relation(fields: [userId], references: [id])
   date        DateTime 
-  moodValue   Int      
+  mood        String      
   comment     String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
