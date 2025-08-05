@@ -2,86 +2,84 @@
 
 import { useEffect, useState } from "react";
 import { useCreateDailyLog, useUpdateDailyLog } from "../hooks/hooks";
-
-import {
-  useCreateMoodEntry,
-  useMoodEntryByDate,
-  useUpdateMoodEntry,
-} from "@/features/mood/hooks/hooks";
-import MoodSelector from "@/features/mood/components/moodSelector";
+import MoodSelector from "@/features/dailyLog/components/moodSelector";
 
 type Props = {
   date: string;
   initialContent?: string;
+  initialMood?: string | null;
+  initialMoodComment?: string | null;
   isEditMode: boolean;
 };
 
 export default function DailyLogEditor({
   date,
   initialContent = "",
+  initialMood = null,
+  initialMoodComment = "",
   isEditMode,
 }: Props) {
   const [content, setContent] = useState(initialContent);
-  const [mood, setMood] = useState<string | null>(null);
-
-  const { data: moodData } = useMoodEntryByDate(date);
+  const [mood, setMood] = useState<string | null>(initialMood);
+  const [moodComment, setMoodComment] = useState(initialMoodComment || "");
 
   const { mutate: createDailyLog } = useCreateDailyLog();
   const { mutate: updateDailyLog } = useUpdateDailyLog();
 
-  const { mutate: createMoodEntry } = useCreateMoodEntry();
-  const { mutate: updateMoodEntry } = useUpdateMoodEntry();
-
   useEffect(() => {
     setContent(initialContent);
-  }, [initialContent]);
-
-  // Mood 데이터 불러와 상태에 반영
-  useEffect(() => {
-    if (moodData) {
-      setMood(moodData.mood);
-    } else {
-      setMood(null); // 기록이 없으면 상태 초기화
-    }
-  }, [moodData]);
+    setMood(initialMood);
+    setMoodComment(initialMoodComment || "");
+  }, [initialContent, initialMood, initialMoodComment]);
 
   const handleSave = () => {
-    // 1. DailyLog 저장 로직
+    const logData = {
+      content,
+      mood,
+      moodComment: moodComment.trim() || undefined,
+    };
     if (isEditMode) {
-      updateDailyLog({ date, content });
+      updateDailyLog({ date, data: logData });
     } else {
-      createDailyLog({ date, content });
-    }
-
-    if (mood) {
-      if (moodData) {
-        const updatedData = { date, mood };
-
-        updateMoodEntry(updatedData);
-      } else {
-        const newData = { date, mood };
-
-        createMoodEntry(newData);
-      }
+      createDailyLog({ date, ...logData });
     }
   };
 
   return (
     <div className="flex flex-col gap-4">
       <MoodSelector selectedMood={mood} onSelectMood={setMood} />
+      {mood && (
+        <div className="bg-gray-50 p-3 rounded-md border">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            이 감정에 대해 더 자세히 써보세요 (선택사항)
+          </label>
+          <textarea
+            className="w-full border rounded p-2 text-sm"
+            rows={2}
+            value={moodComment}
+            onChange={(e) => setMoodComment(e.target.value)}
+            placeholder="오늘 이런 기분이 든 이유가 있나요?"
+          />
+        </div>
+      )}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          일기 내용
+        </label>
+        <textarea
+          className="w-full border rounded p-2"
+          rows={10}
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          placeholder="오늘 하루는 어땠나요? 자유롭게 작성해보세요..."
+        />
+      </div>
 
-      <textarea
-        className="border rounded p-2"
-        rows={10}
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-        placeholder="일기를 작성하세요..."
-      />
       <button
-        className="bg-blue-400 py-2 rounded text-white"
+        className="bg-blue-500 hover:bg-blue-600 py-2 px-4 rounded text-white transition-colors"
         onClick={handleSave}
       >
-        저장하기
+        {isEditMode ? "수정하기" : "저장하기"}
       </button>
     </div>
   );

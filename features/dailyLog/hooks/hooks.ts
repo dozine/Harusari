@@ -6,6 +6,7 @@ import {
   getDailyLogByDate,
   updateDailyLog,
 } from "../services/dailyLogService";
+import { UpdateDailyLogRequest } from "../types";
 
 export const useDailyLogs = () => {
   return useQuery({
@@ -49,11 +50,17 @@ export const useCreateDailyLog = () => {
 export const useUpdateDailyLog = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ date, content }: { date: string; content: string }) =>
-      updateDailyLog(date, content),
+    mutationFn: ({
+      date,
+      data,
+    }: {
+      date: string;
+      data: UpdateDailyLogRequest;
+    }) => updateDailyLog(date, data),
     onSuccess: (updatedLog) => {
+      const dateStr = new Date(updatedLog.date).toISOString().slice(0, 10);
       queryClient.invalidateQueries({
-        queryKey: ["dailyLog", updatedLog.date],
+        queryKey: ["dailyLog", dateStr],
       });
       queryClient.invalidateQueries({ queryKey: ["dailyLog"] });
     },
