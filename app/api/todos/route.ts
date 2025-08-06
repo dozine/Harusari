@@ -68,7 +68,7 @@ export async function PATCH(request: Request) {
       );
     }
     const userId = userPayload.userId;
-    const { id, title, isComplete } = await request.json();
+    const { id, title, isCompleted } = await request.json();
     if (!id || typeof id != "string") {
       return NextResponse.json(
         { message: " Todo Id is required" },
@@ -79,8 +79,8 @@ export async function PATCH(request: Request) {
     if (title !== undefined && typeof title === "string") {
       updateData.title = title.trim();
     }
-    if (isComplete != undefined && typeof isComplete === "boolean") {
-      updateData.isCompleted = isComplete;
+    if (isCompleted != undefined && typeof isCompleted === "boolean") {
+      updateData.isCompleted = isCompleted;
     }
     if (Object.keys(updateData).length === 0) {
       return NextResponse.json(

@@ -9,11 +9,11 @@ export default function DailyLogPage() {
   const date =
     searchParams.get("date") || new Date().toISOString().slice(0, 10);
 
-  const { data: dailyLog, isLoading, error } = useDailyLog(date);
+  const { log, isLoading, error } = useDailyLog(date);
 
   if (isLoading) return <div>로딩 중...</div>;
 
-  const isEditMode = !!dailyLog && !error;
+  const isEditMode = !!log;
 
   return (
     <div className="max-w-2xl mx-auto p-4">
@@ -21,9 +21,9 @@ export default function DailyLogPage() {
 
       <DailyLogEditor
         date={date}
-        initialContent={dailyLog?.content || ""}
-        initialMood={dailyLog?.mood || null}
-        initialMoodComment={dailyLog?.moodComment || null}
+        initialContent={log?.content || ""}
+        initialMood={log?.mood || null}
+        initialMoodComment={log?.moodComment || null}
         isEditMode={isEditMode}
       />
       <hr className="my-6" />

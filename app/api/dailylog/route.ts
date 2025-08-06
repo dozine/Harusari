@@ -2,7 +2,7 @@ import { verifyTokenServer } from "@/utils/auth";
 import prisma from "@/utils/prisma";
 import { NextResponse } from "next/server";
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
     const user = await verifyTokenServer();
     if (!user) {
@@ -53,9 +53,9 @@ export async function POST(request: Request) {
     const dailyLogDate = new Date(date);
     const newDailyLog = await prisma.dailyLog.create({
       data: {
-        userId: userId,
+        userId,
         date: dailyLogDate,
-        content: content || "",
+        content: content || null,
         mood: mood || null,
         moodComment: moodComment || null,
       },
