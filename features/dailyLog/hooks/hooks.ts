@@ -1,3 +1,5 @@
+"use client";
+
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   createDailyLog,
@@ -10,72 +12,57 @@ import { UpdateDailyLogRequest } from "../types";
 
 export const useDailyLogs = () => {
   return useQuery({
-    queryKey: ["dailyLog"],
+    queryKey: ["dailyLogs"],
     queryFn: getDailyLog,
     staleTime: 5 * 60 * 1000,
   });
 };
 
 export const useDailyLog = (date: string) => {
-  return useQuery({
+  const queryClient = useQueryClient();
+  const { data: log, ...queryResult } = useQuery({
     queryKey: ["dailyLog", date],
     queryFn: () => getDailyLogByDate(date),
     enabled: !!date,
     retry: (failureCount, error: any) => {
-      if (error?.response?.status === 404) {
-        return false;
-      }
+      if (error?.response?.status === 404) return false;
       return failureCount < 3;
     },
   });
-};
-
-export const useCreateDailyLog = () => {
-  const queryClient = useQueryClient();
-  return useMutation({
+  const createMutation = useMutation({
     mutationFn: createDailyLog,
     onSuccess: (newLog) => {
-      queryClient.invalidateQueries({ queryKey: ["dailyLog"] });
+      queryClient.invalidateQueries({ queryKey: ["dailyLogs"] });
       if (newLog?.date) {
         const dateStr = new Date(newLog.date).toISOString().slice(0, 10);
         queryClient.invalidateQueries({ queryKey: ["dailyLog", dateStr] });
       }
     },
-    onError: (error) => {
-      console.error("Failed to daily log", error);
+  });
+  const updateMutation = useMutation({
+    mutationFn: (data: UpdateDailyLogRequest) => updateDailyLog(date, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["dailyLogs"] });
+      queryClient.invalidateQueries({ queryKey: ["dailyLog", date] });
     },
   });
-};
 
-export const useUpdateDailyLog = () => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: ({
-      date,
-      data,
-    }: {
-      date: string;
-      data: UpdateDailyLogRequest;
-    }) => updateDailyLog(date, data),
-    onSuccess: (updatedLog) => {
-      const dateStr = new Date(updatedLog.date).toISOString().slice(0, 10);
-      queryClient.invalidateQueries({
-        queryKey: ["dailyLog", dateStr],
-      });
-      queryClient.invalidateQueries({ queryKey: ["dailyLog"] });
-    },
-    onError: (error) => {
-      console.error("Failed to create daily log:", error);
-    },
-  });
-};
-
-export const useDeleteDailyLog = () => {
-  const queryClient = useQueryClient();
-  return useMutation({
+  const deleteMutation = useMutation({
     mutationFn: deleteDailyLog,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["dailyLog"] });
+      queryClient.invalidateQueries({ queryKey: ["dailyLogs"] });
+      queryClient.invalidateQueries({ queryKey: ["dailyLog", date] });
     },
   });
+  return {
+    log,
+    isLoading: queryResult.isLoading,
+    error: queryResult.error,
+    createLog: createMutation.mutate,
+    updateLog: updateMutation.mutate,
+    deleteLog: deleteMutation.mutate,
+    isCreating: createMutation.isPending,
+    isUpdating: updateMutation.isPending,
+    isDeleting: deleteMutation.isPending,
+  };
 };

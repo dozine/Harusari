@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useCreateDailyLog, useUpdateDailyLog } from "../hooks/hooks";
 import MoodSelector from "@/features/dailyLog/components/moodSelector";
+import { useDailyLog } from "../hooks/hooks";
 
 type Props = {
   date: string;
@@ -23,8 +23,7 @@ export default function DailyLogEditor({
   const [mood, setMood] = useState<string | null>(initialMood);
   const [moodComment, setMoodComment] = useState(initialMoodComment || "");
 
-  const { mutate: createDailyLog } = useCreateDailyLog();
-  const { mutate: updateDailyLog } = useUpdateDailyLog();
+  const { createLog, updateLog, isCreating, isUpdating } = useDailyLog(date);
 
   useEffect(() => {
     setContent(initialContent);
@@ -36,15 +35,15 @@ export default function DailyLogEditor({
     const logData = {
       content,
       mood,
-      moodComment: moodComment.trim() || undefined,
+      moodComment: moodComment.trim() || null,
     };
     if (isEditMode) {
-      updateDailyLog({ date, data: logData });
+      updateLog(logData);
     } else {
-      createDailyLog({ date, ...logData });
+      createLog({ date, ...logData });
     }
   };
-
+  const isSaving = isCreating || isUpdating;
   return (
     <div className="flex flex-col gap-4">
       <MoodSelector selectedMood={mood} onSelectMood={setMood} />
@@ -79,7 +78,7 @@ export default function DailyLogEditor({
         className="bg-blue-500 hover:bg-blue-600 py-2 px-4 rounded text-white transition-colors"
         onClick={handleSave}
       >
-        {isEditMode ? "수정하기" : "저장하기"}
+        {isSaving ? "저장중..." : isEditMode ? "수정하기" : "저장하기"}
       </button>
     </div>
   );

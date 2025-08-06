@@ -77,9 +77,9 @@ export async function PATCH(
         },
       },
       data: {
-        content: content,
-        mood: mood,
-        moodComment: moodComment,
+        content: content || null,
+        mood: mood || null,
+        moodComment: moodComment || null,
         updatedAt: new Date(),
       },
     });

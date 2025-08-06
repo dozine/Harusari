@@ -1,6 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useDailyLogs } from "../hooks/hooks";
+import { DailyLog } from "../types";
 
 const moodEmojis: Record<string, string> = {
   very_happy: "😃",
@@ -11,7 +12,7 @@ const moodEmojis: Record<string, string> = {
 };
 
 export default function DailyLogList() {
-  const { data, isLoading, error } = useDailyLogs();
+  const { data: dailyLogs, isLoading, error } = useDailyLogs();
   const router = useRouter();
 
   if (isLoading) return <div>로딩 중 ...</div>;
@@ -22,7 +23,7 @@ export default function DailyLogList() {
 
   return (
     <div className="flex flex-col gap-4">
-      {data?.map((log) => (
+      {dailyLogs?.map((log: DailyLog) => (
         <li key={log.date}>
           <button
             onClick={() => handleSelectDate(log.date.slice(0, 10))}
