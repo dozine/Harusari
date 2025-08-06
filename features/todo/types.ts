@@ -17,5 +17,5 @@ export interface UpdateTodoData {
   title?: string;
   description?: string;
   dueDate?: string | null;
-  isComplete?: boolean;
+  isCompleted?: boolean;
 }

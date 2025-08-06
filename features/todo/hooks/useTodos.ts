@@ -1,6 +1,4 @@
 "use client";
-
-import { useCallback, useEffect, useState } from "react";
 import { Todo } from "../types";
 import {
   createTodo,
@@ -8,75 +6,76 @@ import {
   getTodos,
   updateTodo,
 } from "../services/todoService";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export default function useTodos() {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setErrors] = useState<Error | null>(null);
+  const queryClient = useQueryClient();
+  const {
+    data: todos,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["todos"],
+    queryFn: getTodos,
+  });
 
-  const fetchTodos = useCallback(async () => {
-    try {
-      setIsLoading(true);
-      setErrors(null);
-      const data = await getTodos();
-      setTodos(data);
-    } catch (err) {
-      setErrors(
-        err instanceof Error ? err : new Error("Failed to fetch todos")
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchTodos();
-  }, [fetchTodos]);
-
-  const addTodo = useCallback(async (title: string) => {
-    try {
-      const newTodo = await createTodo({ title });
-      setTodos((prev) => [...prev, newTodo]);
-    } catch (err) {
-      setErrors(err instanceof Error ? err : new Error("Failed to add todo"));
-    }
-  }, []);
-
-  const toggleTodo = useCallback(
-    async (id: string) => {
-      try {
-        const currentTodo = todos.find((t) => t.id === id);
-        if (!currentTodo) return;
-
-        const updatedTodo = await updateTodo(id, {
-          isComplete: !currentTodo.isCompleted,
-        });
-        setTodos((prev) =>
-          prev.map((todo) =>
-            todo.id === id
-              ? { ...todo, isCompleted: updatedTodo.isCompleted }
-              : todo
+  const createTodoMutation = useMutation({
+    mutationFn: createTodo,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["todos"] });
+    },
+  });
+  const toggleTodoMutation = useMutation({
+    mutationFn: ({ id, isCompleted }: { id: string; isCompleted: boolean }) =>
+      updateTodo(id, { isCompleted }),
+    onMutate: async ({
+      id,
+      isCompleted,
+    }: {
+      id: string;
+      isCompleted: boolean;
+    }) => {
+      await queryClient.cancelQueries({ queryKey: ["todos"] });
+      const previousTodos = queryClient.getQueryData<Todo[]>(["todos"]);
+      if (previousTodos) {
+        queryClient.setQueryData(
+          ["todos"],
+          previousTodos.map((todo) =>
+            todo.id === id ? { ...todo, isCompleted: isCompleted } : todo
           )
         );
-      } catch (err) {
-        setErrors(
-          err instanceof Error ? err : new Error("Failed to toggle todo status")
-        );
+      }
+      return { previousTodos };
+    },
+    onError: (err, variables, context) => {
+      if (context?.previousTodos) {
+        queryClient.setQueryData(["todos"], context.previousTodos);
       }
     },
-    [todos]
-  );
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["todos"] });
+    },
+  });
 
-  const removeTodo = useCallback(async (id: string) => {
-    try {
-      await deleteTodo(id);
-      setTodos((prev) => prev.filter((todo) => todo.id !== id));
-    } catch (err) {
-      setErrors(
-        err instanceof Error ? err : new Error("Failed to remove todo")
-      );
+  const deleteTodoMutation = useMutation({
+    mutationFn: deleteTodo,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["todos"] });
+    },
+  });
+  const addTodo = (title: string) => {
+    createTodoMutation.mutate({ title });
+  };
+  const toggleTodo = (id: string) => {
+    const todoToUpdate = todos?.find((t) => t.id === id);
+    if (todoToUpdate) {
+      toggleTodoMutation.mutate({ id, isCompleted: !todoToUpdate.isCompleted });
     }
-  }, []);
+  };
+
+  const removeTodo = (id: string) => {
+    deleteTodoMutation.mutate(id);
+  };
 
   return {
     todos,
@@ -85,6 +84,5 @@ export default function useTodos() {
     removeTodo,
     isLoading,
     error,
-    fetchTodos,
   };
 }
