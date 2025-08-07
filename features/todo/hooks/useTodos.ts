@@ -1,88 +1,81 @@
 "use client";
-import { Todo } from "../types";
+
 import {
-  createTodo,
-  deleteTodo,
   getTodos,
+  getTodosByDate,
+  createTodo,
   updateTodo,
+  deleteTodo,
 } from "../services/todoService";
+import { CreateTodoData, UpdateTodoData } from "../types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-export default function useTodos() {
+export function useTodos() {
+  return useQuery({
+    queryKey: ["todos"],
+    queryFn: getTodos,
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
+export function useTodosByDate(date: string) {
   const queryClient = useQueryClient();
   const {
-    data: todos,
+    data: todos = [],
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["todos"],
-    queryFn: getTodos,
+    queryKey: ["todos", date],
+    queryFn: () => getTodosByDate(date),
+    enabled: !!date,
+    retry: 1,
   });
 
   const createTodoMutation = useMutation({
-    mutationFn: createTodo,
+    mutationFn: (data: CreateTodoData) => createTodo(date, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["todos"] });
+      queryClient.invalidateQueries({ queryKey: ["todos", date] });
+    },
+    onError: (error) => {
+      console.error("Failed to create todo:", error);
     },
   });
-  const toggleTodoMutation = useMutation({
-    mutationFn: ({ id, isCompleted }: { id: string; isCompleted: boolean }) =>
-      updateTodo(id, { isCompleted }),
-    onMutate: async ({
-      id,
-      isCompleted,
-    }: {
-      id: string;
-      isCompleted: boolean;
-    }) => {
-      await queryClient.cancelQueries({ queryKey: ["todos"] });
-      const previousTodos = queryClient.getQueryData<Todo[]>(["todos"]);
-      if (previousTodos) {
-        queryClient.setQueryData(
-          ["todos"],
-          previousTodos.map((todo) =>
-            todo.id === id ? { ...todo, isCompleted: isCompleted } : todo
-          )
-        );
+
+  return {
+    todos,
+    isLoading,
+    error,
+    addTodo: createTodoMutation.mutate,
+    isAdding: createTodoMutation.isPending,
+  };
+}
+
+export function useTodoById(id: string) {
+  const queryClient = useQueryClient();
+
+  const updateTodoMutation = useMutation({
+    mutationFn: (data: UpdateTodoData) => updateTodo(id, data),
+    onSuccess: (updatedTodo) => {
+      if (updatedTodo.date) {
+        const dateString = updatedTodo.date.split("T")[0]; // YYYY-MM-DD 형식으로 변환
+        queryClient.invalidateQueries({ queryKey: ["todos", dateString] });
       }
-      return { previousTodos };
-    },
-    onError: (err, variables, context) => {
-      if (context?.previousTodos) {
-        queryClient.setQueryData(["todos"], context.previousTodos);
-      }
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["todos"] });
     },
   });
 
   const deleteTodoMutation = useMutation({
-    mutationFn: deleteTodo,
+    mutationFn: () => deleteTodo(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["todos"] });
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey[0] === "todos",
+      });
     },
   });
-  const addTodo = (title: string) => {
-    createTodoMutation.mutate({ title });
-  };
-  const toggleTodo = (id: string) => {
-    const todoToUpdate = todos?.find((t) => t.id === id);
-    if (todoToUpdate) {
-      toggleTodoMutation.mutate({ id, isCompleted: !todoToUpdate.isCompleted });
-    }
-  };
-
-  const removeTodo = (id: string) => {
-    deleteTodoMutation.mutate(id);
-  };
 
   return {
-    todos,
-    addTodo,
-    toggleTodo,
-    removeTodo,
-    isLoading,
-    error,
+    updateTodo: updateTodoMutation.mutate,
+    removeTodo: deleteTodoMutation.mutate,
+    isUpdating: updateTodoMutation.isPending,
+    isDeleting: deleteTodoMutation.isPending,
   };
 }
