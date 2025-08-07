@@ -1,33 +1,49 @@
 "use client";
 
-import useTodos from "../hooks/useTodos";
+import { useSearchParams } from "next/navigation";
 import TodoForm from "./TodoForm";
 import TodoItem from "./TodoItem";
+import { useTodosByDate } from "../hooks/useTodos";
 
 export default function TodoList() {
-  const { todos, addTodo, removeTodo, toggleTodo, isLoading, error } =
-    useTodos();
-  if (isLoading) return <p>목록 불러오는 중</p>;
-  if (error) return <p>에러 발생 :{error.message}</p>;
+  const searchParams = useSearchParams();
+  const dateParam = searchParams.get("date");
+  const today = new Date().toISOString().split("T")[0];
+  const date = dateParam || today;
+
+  const { todos, addTodo, isLoading, error, isAdding } = useTodosByDate(date);
+
+  const handleAddTodo = (data: { title: string; description?: string }) => {
+    console.log("할 일 추가:", data, "날짜:", date);
+    addTodo(data);
+  };
+
+  if (isLoading)
+    return <div className="text-center p-4">목록 불러오는 중...</div>;
+  if (error)
+    return (
+      <div className="text-center p-4 text-red-500">
+        에러 발생: {error.message}
+      </div>
+    );
 
   return (
-    <div className="flex space-y-4 justify-center items-center">
-      <div className="m-10">
-        <TodoForm onAddTodo={addTodo} />
-        {todos && todos.length === 0 ? (
-          <p>아직 할 일이 없습니다. 새 할 일을 추가해보세요!</p>
+    <div className="flex flex-col space-y-4 justify-center items-center min-h-screen p-4">
+      <h1 className="text-2xl font-bold text-center">할 일 목록 ({date})</h1>
+
+      <div className="w-full max-w-md">
+        <TodoForm onAddTodo={handleAddTodo} isLoading={isAdding} />
+
+        {todos.length === 0 ? (
+          <p className="text-center text-gray-500 mt-4">
+            아직 할일이 없습니다. 새 할일을 추가해보세요.
+          </p>
         ) : (
-          <ul className="space-y-2">
-            {todos &&
-              todos.map((todo) => (
-                <TodoItem
-                  key={todo.id}
-                  todo={todo}
-                  onToggle={() => toggleTodo(todo.id)}
-                  onRemove={() => removeTodo(todo.id)}
-                />
-              ))}
-          </ul>
+          <div className="mt-4 space-y-2">
+            {todos.map((todo) => (
+              <TodoItem key={todo.id} todo={todo} />
+            ))}
+          </div>
         )}
       </div>
     </div>

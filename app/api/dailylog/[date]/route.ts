@@ -35,12 +35,6 @@ export async function GET(
         },
       },
     });
-    if (!dailyLog) {
-      return NextResponse.json(
-        { message: "daily log not found" },
-        { status: 404 }
-      );
-    }
     return NextResponse.json(dailyLog);
   } catch (error) {
     console.error("Error fetching daily log :", error);
