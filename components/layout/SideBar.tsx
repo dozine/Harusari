@@ -2,6 +2,7 @@
 
 import { useAuth } from "@/hooks/useAuth";
 import Link from "next/link";
+import { FaSignOutAlt } from "react-icons/fa";
 
 export default function Sidebar() {
   const { user, logout } = useAuth();
@@ -10,22 +11,24 @@ export default function Sidebar() {
     logout();
   };
   return (
-    <aside className="p-4 flex flex-col h-full bg-black rounded-full">
-      <div className="mt-2 mb-2 p-2 bg-amber-700 rounded-full">
-        {user && <p>{user.name}</p>}
+    <aside className="p-4 flex flex-col h-full bg-gray-900 rounded-full justify-between items-center gap-6">
+      <div className="flex mt-2 mb-2 p-2 bg-orange-500 rounded-full aspect-square items-center justify-center">
+        {user && <p>{user.name[0]}</p>}
       </div>
-      <nav className="flex-1 space-y-2 overflow-y-auto">
-        <Link href="/" className="block p-2 rounded">
-          첫번째
+      <nav className="space-y-10 overflow-y-auto">
+        <Link href="/" className="block p-2 rounded text-white text-center">
+          <div className="w-3 h-3 rounded-full bg-white" />
         </Link>
-        <Link href="/" className="block p-2 rounded">
-          두번째
+        <Link href="/" className="block p-2 rounded text-white text-center">
+          <div className="w-3 h-3 bg-white" />
         </Link>
-        <Link href="/" className="block p-2 rounded">
-          세번째
+        <Link href="/" className="block p-2 rounded text-white text-center">
+          <div className="w-0 h-0 border-l-[6px] border-r-[6px] border-b-[10px] border-l-transparent border-r-transparent "></div>
         </Link>
       </nav>
-      <button onClick={handleLogout}>logout</button>
+      <button className="text-white mb-2 mt-2" onClick={handleLogout}>
+        <FaSignOutAlt />
+      </button>
     </aside>
   );
 }
