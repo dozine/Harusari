@@ -23,6 +23,7 @@ model User {
   dailyLogs DailyLog[]
   tasks     Task[]
   dailyGoals  Goal[]
+  achievement Achievement[]
 }
 model DailyLog {
   id        String   @id @default(uuid())
@@ -81,4 +82,18 @@ model DailyQuote{
   author String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Achievement{
+  id String @id @default(uuid())
+  userId String 
+  user User @relation(fields : [userId], references:[ id])
+  date DateTime @unique @db.Date
+  completionRate Float
+  totalTasks Int
+  completedTasks Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId,date])
 }
