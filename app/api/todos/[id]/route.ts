@@ -1,3 +1,4 @@
+import { calculateAchievement } from "@/utils/achievement";
 import { verifyTokenServer } from "@/utils/auth";
 import prisma from "@/utils/prisma";
 import { NextResponse } from "next/server";
@@ -48,6 +49,21 @@ export async function PATCH(
       updateData.description = description;
     }
 
+    const originalTodo = await prisma.task.findUnique({
+      where: {
+        id: params.id,
+        userId: userId,
+      },
+      select: {
+        date: true,
+      },
+    });
+
+    if (!originalTodo) {
+      return NextResponse.json({ message: "Todo not found" }, { status: 404 });
+    }
+
+    await calculateAchievement(userId, originalTodo.date);
     const updatedTodo = await prisma.task.update({
       where: {
         id: params.id,
@@ -83,13 +99,26 @@ export async function DELETE(
     }
 
     const userId = user.userId;
+    const todoToDelete = await prisma.task.findUnique({
+      where: {
+        id: params.id,
+        userId: userId,
+      },
+      select: {
+        date: true,
+      },
+    });
 
+    if (!todoToDelete) {
+      return NextResponse.json({ message: "Todo not found" }, { status: 404 });
+    }
     await prisma.task.delete({
       where: {
         id: params.id,
         userId: userId,
       },
     });
+    await calculateAchievement(userId, todoToDelete.date);
 
     return NextResponse.json(
       { message: "Todo deleted successfully" },
