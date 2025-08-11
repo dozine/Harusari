@@ -43,12 +43,12 @@ export default function MoodWidget() {
   }
 
   return (
-    <div className="bg-slate-4 rounded-lg shadow p-6 h-full flex flex-col justify-center items-center">
+    <div className="bg-gray-200 rounded-3xl p-6 h-full flex flex-col justify-center items-center">
       <h3 className="text-xl font-bold mb-2">오늘의 기분을 기록해주세요!</h3>
       <p className="text-gray-500 mb-4">오늘 하루는 어떠셨나요?</p>
       <Link
         href="/dailylog"
-        className="bg-orange-500 text-white py-2 px-4 rounded-md hover:bg-orange-500 transition-colors"
+        className="bg-orange-500 text-white py-2 px-4 rounded-3xl hover:bg-orange-400 transition-colors"
       >
         기록하기
       </Link>

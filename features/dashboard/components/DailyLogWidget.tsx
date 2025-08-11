@@ -53,12 +53,15 @@ export default function DailyLogWidget() {
   }
 
   return (
-    <div className="bg-green rounded-lg shadow p-6 h-full flex flex-col justify-center items-center">
+    <div className="bg-gray-200 rounded-3xl  p-6 h-full flex flex-col justify-center items-center">
       <h3 className="text-xl font-bold mb-2">오늘의 기록을 남겨보세요</h3>
       <p className="text-gray-500 mb-4">오늘 있었던 일을 기록할 시간입니다.</p>
-      <button className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition-colors">
+      <Link
+        href="/dailylog"
+        className="bg-orange-500 text-white py-2 px-4 rounded-3xl hover:bg-orange-400 transition-colors"
+      >
         작성하기
-      </button>
+      </Link>
     </div>
   );
 }
