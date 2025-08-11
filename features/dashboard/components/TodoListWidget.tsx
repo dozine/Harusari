@@ -54,7 +54,9 @@ export default function TodoListWidget() {
                 )}
                 <span
                   className={`flex-grow ${
-                    todo.isCompleted ? "line-through text-gray-400" : ""
+                    todo.isCompleted
+                      ? "line-through text-gray-400"
+                      : "text-gray-500"
                   }`}
                 >
                   {todo.title}

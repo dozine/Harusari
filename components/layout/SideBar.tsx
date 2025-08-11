@@ -2,11 +2,12 @@
 
 import { useAuth } from "@/hooks/useAuth";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { FaSignOutAlt } from "react-icons/fa";
 
 export default function Sidebar() {
   const { user, logout } = useAuth();
-
+  const pathname = usePathname();
   const handleLogout = () => {
     logout();
   };
@@ -16,13 +17,23 @@ export default function Sidebar() {
         {user && <p>{user.name[0]}</p>}
       </div>
       <nav className="space-y-10 overflow-y-auto">
-        <Link href="/" className="block p-2 rounded text-white text-center">
+        <Link
+          href="/dashboard"
+          className="block p-2 rounded text-white text-center "
+        >
           <div className="w-3 h-3 rounded-full bg-white" />
         </Link>
-        <Link href="/" className="block p-2 rounded text-white text-center">
+        <Link
+          href="/todos"
+          className="block p-2 rounded text-white text-center"
+        >
           <div className="w-3 h-3 bg-white" />
         </Link>
-        <Link href="/" className="block p-2 rounded text-white text-center">
+        <Link
+          href="/dailylog
+        "
+          className="block p-2 rounded text-white text-center"
+        >
           <div className="w-0 h-0 border-l-[6px] border-r-[6px] border-b-[10px] border-l-transparent border-r-transparent "></div>
         </Link>
       </nav>
