@@ -2,6 +2,15 @@ import { verifyTokenServer } from "@/utils/auth";
 import prisma from "@/utils/prisma";
 import { NextResponse } from "next/server";
 
+function parseDateParam(dateParam: string): Date | null {
+  const regex = /^\d{4}-\d{2}-\d{2}$/;
+  if (!regex.test(dateParam)) return null;
+
+  const [year, month, day] = dateParam.split("-").map(Number);
+  const date = new Date(Date.UTC(year, month - 1, day));
+  return isNaN(date.getTime()) ? null : date;
+}
+
 export async function GET(
   request: Request,
   { params }: { params: { date: string } }
@@ -15,23 +24,19 @@ export async function GET(
       );
     }
     const userId = user.userId;
-    const dateParam = params.date;
-    if (!dateParam) {
+    const date = parseDateParam(params.date);
+    if (!date) {
       return NextResponse.json(
         { message: "Date parameter is missing" },
         { status: 400 }
       );
     }
 
-    const date = new Date(dateParam);
-    if (isNaN(date.getTime())) {
-      return NextResponse.json({ message: "Invalid date format" });
-    }
     const dailyLog = await prisma.dailyLog.findUnique({
       where: {
         userId_date: {
           userId: userId,
-          date: date,
+          date,
         },
       },
     });
@@ -61,13 +66,18 @@ export async function PATCH(
     }
     const userId = user.userId;
     const { content, mood, moodComment } = await request.json();
-    const date = params.date;
-
+    const date = parseDateParam(params.date);
+    if (!date) {
+      return NextResponse.json(
+        { message: "Date parameter is missing" },
+        { status: 400 }
+      );
+    }
     const updatedDailyLog = await prisma.dailyLog.update({
       where: {
         userId_date: {
           userId: userId,
-          date: new Date(date),
+          date,
         },
       },
       data: {
@@ -100,11 +110,10 @@ export async function DELETE(
       );
     }
     const userId = user.userId;
-    const dateParams = params.date;
-    const date = new Date(dateParams);
-    if (isNaN(date.getTime())) {
+    const date = parseDateParam(params.date);
+    if (!date) {
       return NextResponse.json(
-        { message: "Invalid date format in URL " },
+        { message: "Date parameter is missing" },
         { status: 400 }
       );
     }
@@ -112,7 +121,7 @@ export async function DELETE(
       where: {
         userId_date: {
           userId: userId,
-          date: date,
+          date,
         },
       },
     });
