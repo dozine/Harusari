@@ -79,36 +79,40 @@ export default function LoginForm() {
     loginMutation.mutate({ email, password });
   };
   return (
-    <div className="max-w-md mx-auto">
+    <div className="max-w-lg mx-auto">
+      <h1
+        className="font-bold text-4xl tracking-wider bg-clip-text text-transparent
+    bg-gradient-to-r from-orange-400 to-rose-600 mb-4"
+      >
+        Harusari
+      </h1>
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <Input
-            id="email"
-            label="email"
-            type="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            error={!!errors.email}
-            errorMessage={errors.email}
-            disabled={loginMutation.isPending}
-            placeholder="이메일을 입력해주세요"
-          />
-        </div>
-        <div>
-          <Input
-            id="password"
-            label="password"
-            type="password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            error={!!errors.password}
-            errorMessage={errors.password}
-            disabled={loginMutation.isPending}
-            placeholder="비밀번호를 입력해주세요"
-          />
-        </div>
+        <Input
+          id="email"
+          label="email"
+          type="email"
+          required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          error={!!errors.email}
+          errorMessage={errors.email}
+          disabled={loginMutation.isPending}
+          placeholder="이메일을 입력해주세요"
+        />
+
+        <Input
+          id="password"
+          label="password"
+          type="password"
+          required
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          error={!!errors.password}
+          errorMessage={errors.password}
+          disabled={loginMutation.isPending}
+          placeholder="비밀번호를 입력해주세요"
+        />
+
         {errors.general && (
           <div className="rounded-md bg-red-50 p-4">
             <p className="text-sm text-red-800 text-center">{errors.general}</p>
@@ -119,9 +123,19 @@ export default function LoginForm() {
             {loginMutation.isPending ? "로그인 중 ..." : "로그인"}
           </Button>
         </div>
-        <div>
-          <Link href="/">비번 찾기</Link>
-          <Link href="/signup">회원 가입</Link>
+        <div className="flex justify-between mx-4">
+          <Link
+            href="/"
+            className="text-sm text-gray-900 hover:text-orange-500"
+          >
+            비번 찾기
+          </Link>
+          <Link
+            href="/signup"
+            className="text-sm text-gray-900 hover:text-orange-500"
+          >
+            회원 가입
+          </Link>
         </div>
       </form>
     </div>
