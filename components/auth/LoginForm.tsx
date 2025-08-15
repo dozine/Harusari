@@ -54,7 +54,7 @@ export default function LoginForm() {
       login(data.user);
 
       alert("로그인 성공!");
-      router.push("/");
+      router.push("/dashboard");
     },
     onError: (error: any) => {
       console.error("로그인 실패", error);
