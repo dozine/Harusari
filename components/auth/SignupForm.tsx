@@ -156,13 +156,13 @@ export default function SignupForm() {
           이미 계정이 있으신가요?
           <Link
             href="/login"
-            className="text-sky-600 hover:text-sky-500 font-medium"
+            className="text-orange-500 hover:text-orange-600 font-medium"
           >
             로그인하기
           </Link>
         </p>
       </div>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <Input
             id="name"

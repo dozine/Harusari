@@ -32,7 +32,7 @@ const Input: React.FC<InputProps> = ({
         htmlFor={id}
       >
         {label}
-        {required && <span className="text-red-500 ml-1">*</span>}
+        {required && <span className="text-red-500 ml-1"></span>}
       </label>
       <div className="mt-2">
         <input
@@ -44,26 +44,25 @@ const Input: React.FC<InputProps> = ({
           onChange={onChange}
           className={clsx(
             `form-input
+            bg-gray-200
+            text-gray-500
+            py-1
+            px-2
             block
             w-full
-            rounded-md
+            rounded-3xl
             border-gray-900
-            shadow-sm
-            ring-1
-            ring-inset
-            ring-gray-300
             placeholder:text-gray-400
-            focus:ring-2
-            focus:ring-inset
-            focus:ring-sky-600
             sm:text-sm
-            sm:leading-6`,
+            sm:leading-6
+            focus:outline-none
+            `,
+            !error && "focus:ring-1 focus:ring-orange-600",
             error && "focus:ring-rose-500 ring-rose-500",
             disabled && "opacity-50 cursor-not-allowed"
           )}
           {...rest}
         />
-
         {error && errorMessage && (
           <p className="mt-2 text-sm text-rose-500">{errorMessage}</p>
         )}
