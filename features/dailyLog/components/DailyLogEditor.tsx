@@ -1,72 +1,36 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import MoodSelector from "@/features/dailyLog/components/moodSelector";
-import { useDailyLog } from "../hooks/hooks";
+import { useState } from "react";
+import MoodSelector from "./moodSelector";
 
 type Props = {
   date: string;
-  initialContent?: string;
-  initialMood?: string | null;
-  initialMoodComment?: string | null;
-  isEditMode: boolean;
+  onSave: (mood: string, moodComment: string, content: string) => void;
+  isSaving: boolean;
 };
 
-export default function DailyLogEditor({
-  date,
-  initialContent = "",
-  initialMood = null,
-  initialMoodComment = "",
-  isEditMode,
-}: Props) {
-  const [content, setContent] = useState(initialContent);
-  const [mood, setMood] = useState<string | null>(initialMood);
-  const [moodComment, setMoodComment] = useState(initialMoodComment || "");
-
-  const { createLog, updateLog, isCreating, isUpdating } = useDailyLog(date);
-
-  useEffect(() => {
-    setContent(initialContent);
-    setMood(initialMood);
-    setMoodComment(initialMoodComment || "");
-  }, [initialContent, initialMood, initialMoodComment]);
+export default function DailyLogEditor({ date, onSave, isSaving }: Props) {
+  const [content, setContent] = useState("");
+  const [selectedMood, setSelectedMood] = useState<{
+    mood: string;
+    moodComment: string;
+  } | null>(null);
 
   const handleSave = () => {
-    const logData = {
-      content,
-      mood,
-      moodComment: moodComment.trim() || null,
-    };
-    if (isEditMode) {
-      updateLog(logData);
-    } else {
-      createLog({ date, ...logData });
+    if (selectedMood && content.trim()) {
+      onSave(selectedMood.mood, selectedMood.moodComment, content);
     }
   };
-  const isSaving = isCreating || isUpdating;
+
   return (
-    <div className="flex flex-col gap-4">
-      <MoodSelector selectedMood={mood} onSelectMood={setMood} />
-      {mood && (
-        <div className="bg-gray-50 p-3 rounded-md border">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            이 감정에 대해 더 자세히 써보세요 (선택사항)
-          </label>
-          <textarea
-            className="w-full border rounded p-2 text-sm"
-            rows={2}
-            value={moodComment}
-            onChange={(e) => setMoodComment(e.target.value)}
-            placeholder="오늘 이런 기분이 든 이유가 있나요?"
-          />
-        </div>
-      )}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+    <div className="flex flex-col gap-4 justify-center items-center">
+      <MoodSelector onSelectMood={setSelectedMood} />
+      <div className="w-full">
+        <label className="block text-sm font-medium text-gray-700 mb-6">
           일기 내용
         </label>
         <textarea
-          className="w-full border rounded p-2"
+          className="w-full rounded-3xl p-6 bg-gray-200"
           rows={10}
           value={content}
           onChange={(e) => setContent(e.target.value)}
@@ -75,10 +39,11 @@ export default function DailyLogEditor({
       </div>
 
       <button
-        className="bg-blue-500 hover:bg-blue-600 py-2 px-4 rounded text-white transition-colors"
+        className="bg-orange-500 hover:bg-orange-600 py-2 px-4 rounded-3xl text-white transition-colors disabled:opacity-50"
         onClick={handleSave}
+        disabled={isSaving || !selectedMood || !content.trim()}
       >
-        {isSaving ? "저장중..." : isEditMode ? "수정하기" : "저장하기"}
+        {isSaving ? "저장 중..." : "저장하기"}
       </button>
     </div>
   );

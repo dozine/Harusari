@@ -36,7 +36,6 @@ export default function MoodWidget() {
         <div className="flex flex-col items-center flex-grow justify-center">
           <div className="text-5xl mb-2">😀</div>
           <p className="text-lg text-gray-600 font-semibold">{log.mood}</p>
-          <p className="text-sm text-gray-400 mt-1">"{log.moodComment}"</p>
         </div>
       </div>
     );

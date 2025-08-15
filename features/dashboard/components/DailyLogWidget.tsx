@@ -33,10 +33,7 @@ export default function DailyLogWidget() {
           <h3 className="flex text-xl text-gray-800 justify-start">
             Daily Log
           </h3>
-          <Link
-            href="/dailylog
-          "
-          >
+          <Link href={`/dailylog/${today}`}>
             <div className="bg-black rounded-full w-6 h-6 flex items-center justify-center hover:bg-orange-500 transition-colors">
               <FaArrowRight className="text-white -rotate-45" />
             </div>

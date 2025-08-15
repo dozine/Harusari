@@ -1,7 +1,8 @@
 "use client";
-import { useRouter } from "next/navigation";
 import { useDailyLogs } from "../hooks/hooks";
 import { DailyLog } from "../types";
+import DailyLogByDate from "./DailyLogByDate";
+import Link from "next/link";
 
 const moodEmojis: Record<string, string> = {
   very_happy: "😃",
@@ -13,41 +14,21 @@ const moodEmojis: Record<string, string> = {
 
 export default function DailyLogList() {
   const { data: dailyLogs, isLoading, error } = useDailyLogs();
-  const router = useRouter();
-
   if (isLoading) return <div>로딩 중 ...</div>;
   if (error) return <div>에러가 발생했습니다.</div>;
-  const handleSelectDate = (date: string) => {
-    router.push(`/dailylog?date=${date}`);
-  };
 
   return (
     <div className="flex flex-col gap-4">
-      {dailyLogs?.map((log: DailyLog) => (
-        <li key={log.date}>
-          <button
-            onClick={() => handleSelectDate(log.date.slice(0, 10))}
-            className="text-left w-full p-3 rounded hover:bg-gray-100 border transition-colors"
-          >
-            <div className="flex items-center justify-between mb-2">
-              <p className="font-medium">{log.date.slice(0, 10)}</p>
-              {log.mood && (
-                <span className="text-xl">{moodEmojis[log.mood] || "😐"}</span>
-              )}
-            </div>
+      {dailyLogs?.map((log: DailyLog) => {
+        const date = new Date(log.date).toISOString().split("T")[0];
 
-            {log.moodComment && (
-              <p className="text-xs text-blue-600 mb-1 italic">
-                "{log.moodComment}"
-              </p>
-            )}
-
-            <p className="text-sm truncate text-gray-600">
-              {log.content || "내용 없음"}
-            </p>
-          </button>
-        </li>
-      ))}
+        return (
+          <Link key={date} href={`/dailylog/${date}`}>
+            <DailyLogByDate date={date} />
+          </Link>
+        );
+      })}
     </div>
   );
+  1;
 }
