@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import jwt, { Secret } from "jsonwebtoken";
@@ -20,7 +22,6 @@ export async function GET() {
       );
     }
 
-    // 토큰 검증
     const decoded = jwt.verify(token, JWT_SECRET);
 
     if (
@@ -37,7 +38,6 @@ export async function GET() {
 
     const { userId, email } = decoded as { userId: string; email: string };
 
-    // 사용자 정보 조회
     const user = await prisma.user.findUnique({
       where: { id: decoded.userId },
       select: {

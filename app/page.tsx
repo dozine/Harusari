@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { verifyTokenServer } from "@/utils/auth";
 import { redirect } from "next/navigation";
 
