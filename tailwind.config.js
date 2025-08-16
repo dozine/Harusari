@@ -15,6 +15,12 @@ module.exports = {
       fontFamily: {
         sans: ["var(--font-inter)", "sans-serif"],
       },
+      height: {
+        "screen-dvh": "100dvh",
+      },
+      minHeight: {
+        "screen-dvh": "100dvh",
+      },
     },
   },
   plugins: [],
