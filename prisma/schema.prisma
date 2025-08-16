@@ -20,48 +20,39 @@ model User {
   name      String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
-
   dailyLogs DailyLog[]
   tasks     Task[]
-  moodEntries MoodEntry[]
-  dailyGoals  DailyGoal[]
+  dailyGoals  Goal[]
+  achievement Achievement[]
 }
-
 model DailyLog {
   id        String   @id @default(uuid())
   userId    String
   user      User     @relation(fields: [userId], references: [id])
-  date      DateTime @unique 
+  date      DateTime @db.Date
   content   String?  @db.Text 
+  mood      String?
+  moodComment String? @db.Text
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  @@unique([userId, date])
 }
+
 
 model Task {
   id          String    @id @default(uuid())
   userId      String
   user        User      @relation(fields: [userId], references: [id])
   title       String
-  description String?
+  description String?   @db.Text
   dueDate     DateTime?
+  date        DateTime  @db.Date
   isCompleted Boolean   @default(false)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }
 
-model MoodEntry {
-  id          String   @id @default(uuid())
-  userId      String
-  user        User     @relation(fields: [userId], references: [id])
-  date        DateTime @unique 
-  moodValue   Int      
-  comment     String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
-model DailyGoal {
+model Goal {
   id        String   @id @default(uuid())
   userId    String
   user      User     @relation(fields: [userId], references: [id])
@@ -70,4 +61,39 @@ model DailyGoal {
   isAchieved Boolean @default(false) 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Weather{
+  id String @id @default(uuid())
+  date DateTime @db.Date
+  condition String
+  temperature Float
+  humidity Int
+  windSpeed Float
+  location String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model DailyQuote{
+  id String @id @default(uuid())
+  date DateTime @unique @db.Date
+  text String @db.Text
+  author String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Achievement{
+  id String @id @default(uuid())
+  userId String 
+  user User @relation(fields : [userId], references:[ id])
+  date DateTime @unique @db.Date
+  completionRate Float
+  totalTasks Int
+  completedTasks Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId,date])
 }
