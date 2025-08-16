@@ -9,10 +9,10 @@ export default function MainLayout({
     <ProtectedRoute redirectTo="/login">
       <div className="flex bg-orange-500 min-h-screen justify-center">
         <div className="flex bg-white min-h-screen w-full max-w-[1280px] mx-auto">
-          <div className="h-full p-4">
+          <div className="h-min-h-screen p-4">
             <Sidebar />
           </div>
-          <div className="flex-1 flex flex-col w-full">
+          <div className="flex-1 flex flex-col w-full min-h-screen">
             <Navbar />
             <main className="flex-1 p-6 overflow-auto">{children} </main>
             <footer className="flex justify-center mb-6 text-gray-900">
