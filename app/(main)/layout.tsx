@@ -7,8 +7,8 @@ export default function MainLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <ProtectedRoute redirectTo="/login">
-      <div className="flex bg-orange-500 min-h-[100dvh] justify-center">
-        <div className="flex bg-white min-h-[100dvh] w-full max-w-[1280px] mx-auto scale-90 origin-top h-[111vh]">
+      <div className="flex bg-orange-500 min-h-screen justify-center">
+        <div className="flex bg-white min-h-screen w-full max-w-[1280px] mx-auto">
           <div className="min-h-screen p-4">
             <Sidebar />
           </div>
