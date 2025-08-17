@@ -8,8 +8,8 @@ export default function MainLayout({
   return (
     <ProtectedRoute redirectTo="/login">
       <div className="flex bg-orange-500 min-h-screen justify-center">
-        <div className="flex bg-white min-h-screen w-full max-w-[1280px] mx-auto">
-          <div className="min-h-screen p-4">
+        <div className="flex bg-white h-screen w-full max-w-[1280px] mx-auto">
+          <div className="p-4">
             <Sidebar />
           </div>
           <div className="flex-1 flex flex-col w-full min-h-screen">
