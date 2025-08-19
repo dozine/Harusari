@@ -18,7 +18,7 @@ export default function DailyLogList() {
   if (error) return <div>에러가 발생했습니다.</div>;
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 w-full">
       {dailyLogs?.map((log: DailyLog) => {
         const date = new Date(log.date).toISOString().split("T")[0];
 

@@ -125,6 +125,7 @@ export async function DELETE(
         },
       },
     });
+    return NextResponse.json({ message: "Daily log deleted successfully" });
   } catch (error) {
     console.error("Error deleting daily log", error);
     return NextResponse.json(

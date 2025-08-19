@@ -58,7 +58,7 @@ export default function DailyLogDetailPage({
 
   const handleRemove = () => {
     if (confirm("정말 삭제하시겠습니까?")) {
-      deleteLog(log.date);
+      deleteLog(log.date.slice(0, 10));
       router.push("/dailylog");
     }
   };
@@ -69,14 +69,14 @@ export default function DailyLogDetailPage({
         <div className="rounded-lg p-2 flex ">
           <button
             onClick={handleEdit}
-            className="px-3 py-1 bg-orange-500 text-white rounded-full hover:bg-orange-600 mr-2"
+            className="px-3 py-1 bg-orange-500 text-white rounded-full hover:bg-orange-600 mr-2 text-xs"
           >
             Edit
           </button>
           <button
             onClick={handleRemove}
             disabled={isDeleting}
-            className="px-3 py-1 bg-orange-500 text-white rounded-full hover:bg-orange-600 disabled:opacity-50"
+            className="px-3 py-1 bg-orange-500 text-white rounded-full hover:bg-orange-600 disabled:opacity-50 text-xs"
           >
             {isDeleting ? "삭제중..." : "Delete"}
           </button>
