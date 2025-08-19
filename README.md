@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Harusari
 
-## Getting Started
+하루사리(Harusari) 는 하루의 일정을 효율적으로 관리하면서, 그날의 날씨·기분·성취도를 기록하고 돌아볼 수 있는 개인 라이프로그 서비스입니다.
+단순한 할일 관리가 아니라, 나의 감정과 성취까지 함께 기록하여 나만의 척도를 확인할 수 있습니다.
 
-First, run the development server:
+## 기술 스택
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- 언어: TypeScript
+- 프레임워크: Next.js
+- 스타일링: Tailwind CSS
+- API & DB: Prisma + PostgreSQL
+- 상태 관리: Recoil → Zustand
+- 데이터 페칭: React Query
+- 배포: Vercel
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 주요 기능
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- 인증
+- 로그인 / 로그아웃
+- 데일리 콘텐츠
+- 오늘의 명언
+- 오늘의 날씨
+- 오늘의 기분 기록
+- 오늘의 할 일 작성 & 관리
+- 데일리 로그 기록
+- 성과 지표
+- 오늘의 성취도 확인
+- 월별 성취도 Heatmap 시각화
+- 주간 성취도 Line Chart 시각화
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 서비스 플로우
 
-## Learn More
+- 사용자가 로그인
+- 오늘의 할 일 및 기분/날씨 기록
+- 하루가 끝날 때 성취도 자동 계산
+- 기록된 데이터는 일/주/월 단위로 시각화
 
-To learn more about Next.js, take a look at the following resources:
+## 앞으로의 계획
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- 감정, 날씨, 성취도를 데이터 분석을 통해 상관관계 시각화
+- 개인 맞춤형 리포트 제공 (주간/월간)
+- 캘린더 뷰 확장
