@@ -106,19 +106,19 @@ function AchievementHeatmap() {
   }
 
   return (
-    <div className="flex flex-col bg-gray-200 rounded-3xl h-full p-6">
+    <div className="flex flex-col bg-gray-200 rounded-3xl h-full p-4  ">
       <div className="flex items-center justify-start">
-        <p className="text-xl text-gray-800">Monthly Achievements</p>
+        <p className="text-md text-gray-800">Monthly Achievements</p>
       </div>
-      <div className="flex flex-1  justify-between">
+      <div className="flex flex-1 justify-between gap-4 overflow-hidden mt-4">
         <div className="flex flex-1 flex-col items-center justify-center">
-          <div className="flex aspect-square rounded-full border border-orange-500 justify-center items-center p-5">
-            <div className="text-2xl font-bold text-orange-500">
+          <div className="flex aspect-square rounded-full border border-orange-500 justify-center items-center p-4">
+            <div className="text-md font-bold text-orange-500">
               {averageCompletionRate}%
             </div>
           </div>
         </div>
-        <div className="flex flex-1 overflow-x-auto h-full overflow-hidden min-h-0 justify-center items-center">
+        <div className="flex flex-1 overflow-auto justify-center items-center py-2 ">
           <CalendarHeatmap
             startDate={startDate}
             endDate={endDate}

@@ -59,7 +59,7 @@ export default function TodoItem({ todo }: TodoItemProps) {
   };
 
   return (
-    <div className="flex items-start justify-between p-4 bg-gray-200 rounded-3xl w-full max-w-xs h-40">
+    <div className="flex items-start justify-between p-4 bg-gray-200 rounded-3xl w-full max-w-[200px] h-40">
       <div className="flex items-start flex-1 ">
         <label className="relatice flex cursor-pointer items-start mr-4">
           <input

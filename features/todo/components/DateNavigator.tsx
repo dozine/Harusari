@@ -1,4 +1,3 @@
-// components/DateNavigator.tsx
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
@@ -25,7 +24,7 @@ export default function DateNavigator() {
     changeDate(e.target.value);
   };
   const getButtonClass = (buttonDate: string) =>
-    `px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+    `hidden sm:block px-4 py-2 rounded-full text-xs font-medium transition-colors ${
       date === buttonDate
         ? "bg-orange-500 text-white"
         : "bg-gray-200 text-gray-500 hover:bg-gray-300"
@@ -62,7 +61,7 @@ export default function DateNavigator() {
           type="date"
           value={date}
           onChange={handleDateChange}
-          className="bg-gray-200 text-gray-500 rounded-full text-sm font-medium px-4 py-2 cursor-pointer transition-colors hover:bg-gray-300 focus:outline-none"
+          className="bg-gray-200 text-gray-500 rounded-full text-xs font-medium px-4 py-2 cursor-pointer transition-colors hover:bg-gray-300 focus:outline-none"
         />
       </div>
     </div>

@@ -28,9 +28,9 @@ export default function DailyLogWidget() {
 
   if (log && log.content) {
     return (
-      <div className="bg-gray-200 rounded-3xl p-6 h-full">
+      <div className="flex flex-col bg-gray-200 rounded-3xl p-4 h-full">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="flex text-xl text-gray-800 justify-start">
+          <h3 className="flex text-md text-gray-800 justify-start">
             Daily Log
           </h3>
           <Link href={`/dailylog/${today}`}>
@@ -39,26 +39,28 @@ export default function DailyLogWidget() {
             </div>
           </Link>
         </div>
-        <p className="text-gray-500 flex-grow overflow-hidden line-clamp-5">
-          {log.content}
-        </p>
+        <p className="text-gray-500 flex-1 overflow-y-auto">{log.content}</p>
         <div className="mt-4 text-right">
-          <button className="text-blue-500 hover:text-blue-600 transition-colors"></button>
+          <button className="text-orange-500 hover:text-orange-600 transition-colors"></button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="bg-gray-200 rounded-3xl  p-6 h-full flex flex-col justify-center items-center">
-      <h3 className="text-xl font-bold mb-2">오늘의 기록을 남겨보세요</h3>
-      <p className="text-gray-500 mb-4">오늘 있었던 일을 기록할 시간입니다.</p>
-      <Link
-        href="/dailylog"
-        className="bg-orange-500 text-white py-2 px-4 rounded-3xl hover:bg-orange-400 transition-colors"
-      >
-        작성하기
-      </Link>
+    <div className="bg-gray-200 rounded-3xl p-4 h-full">
+      <div className="flex justify-between items-center mb-4">
+        <h3 className="flex text-mb text-gray-800 justify-start">Daily Log</h3>
+        <Link href={`/dailylog/${today}`}>
+          <div className="bg-black rounded-full w-6 h-6 flex items-center justify-center hover:bg-orange-500 transition-colors">
+            <FaArrowRight className="text-white -rotate-45" />
+          </div>
+        </Link>
+      </div>
+
+      <p className="text-gray-500 text-sm">
+        아직 daily log를 작성하지 않았어요!
+      </p>
     </div>
   );
 }

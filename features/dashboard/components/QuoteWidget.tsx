@@ -16,7 +16,7 @@ export default function QuoteWidget() {
 
   if (error) {
     return (
-      <div className="bg-white rounded-lg shadow p-6 flex flex-col justify-center items-center h-full">
+      <div className="bg-white rounded-lg shadow p-4 flex flex-col justify-center items-center h-full">
         <p className="text-red-500">명언을 가져오는 데 실패했습니다.</p>
       </div>
     );
@@ -24,13 +24,13 @@ export default function QuoteWidget() {
 
   if (quote) {
     return (
-      <div className="bg-orange-500 rounded-3xl p-6 flex flex-col justify-between h-full">
+      <div className="bg-orange-500 rounded-3xl p-4 flex flex-col justify-between h-full">
         <div className="flex flex-col flex-grow justify-center items-center text-center">
-          <blockquote className="text-2xl italic font-semibold text-gray-800 leading-relaxed">
+          <blockquote className="text-xl italic font-semibold text-gray-800 leading-relaxed">
             "{quote.text}"
           </blockquote>
           {quote.author && (
-            <cite className="mt-4 text-white text-lg not-italic">
+            <cite className="mt-4 text-white text-md not-italic">
               - {quote.author}
             </cite>
           )}

@@ -1,8 +1,5 @@
 "use client";
 
-import ProtectedRoute from "@/components/auth/ProtectedRoute";
-import Navbar from "@/components/layout/NavBar";
-import Sidebar from "@/components/layout/SideBar";
 import DailyAchievement from "@/features/achievements/components/DailyAchievement";
 import WeeklyAchievement from "@/features/achievements/components/WeeklyAchievement";
 import DailyLogWidget from "@/features/dashboard/components/DailyLogWidget";
@@ -14,33 +11,39 @@ import MonthlyAchievement from "@/features/achievements/components/MonthlyAchiev
 
 export default function DashboardPage() {
   return (
-    <div className="grid grid-cols-4 grid-rows-[auto_1fr_1fr] gap-6 h-full">
-      <div className="col-span-2">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 md:grid-rows-3 gap-4 h-full md:overflow-hidden">
+      <div className="col-span-1 sm:col-span-2 md:col-span-2 ">
         <QuoteWidget />
       </div>
-      <div className="col-span-1 min-h-0">
+
+      <div className="col-span-1 sm:col-span-1 md:col-span-1 ">
         <WeatherWidget />
       </div>
-      <div className="col-span-1 min-h-0">
+
+      <div className="col-span-1 sm:col-span-1 md:col-span-1">
         <MoodWidget />
       </div>
 
-      <div className="col-span-1 row-span-2  h-full min-h-0">
+      <div className="col-span-1 sm:col-span-1 sm:row-span-2 md:col-span-1 md:row-span-2 flex flex-col gap-4">
         <TodoListWidget />
       </div>
-      <div className="col-span-1 row-span-2 flex flex-col gap-6 h-full">
-        <div className="flex-1 min-h-0">
+
+      {/* DailyAchievement + DailyLogWidget 섹션 - 최소 높이 추가 */}
+      <div className="col-span-1 sm:col-span-1 sm:row-span-2 md:col-span-1 md:row-span-2 flex flex-col gap-4 min-h-[400px] sm:min-h-[300px]">
+        <div className="flex-1 min-h-[100px]">
           <DailyAchievement />
         </div>
-        <div className="flex-1 min-h-0">
+        <div className="flex-1 min-h-[100px]">
           <DailyLogWidget />
         </div>
       </div>
-      <div className="col-span-2 row-span-2 flex flex-col gap-6 h-full">
-        <div className="flex-1 min-h-0">
+
+      {/* MonthlyAchievement + WeeklyAchievement 섹션 - 최소 높이 추가 */}
+      <div className="col-span-1 sm:col-span-2 md:col-span-2 md:row-span-2 flex flex-col gap-4 min-h-[400px] sm:min-h-[300px]">
+        <div className="flex-1 min-h-[100px]">
           <MonthlyAchievement />
         </div>
-        <div className="flex-1 min-h-0">
+        <div className="flex-1 min-h-[100px]">
           <WeeklyAchievement />
         </div>
       </div>

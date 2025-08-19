@@ -29,9 +29,9 @@ export default function TodoListWidget() {
   }
 
   return (
-    <div className="bg-gray-200 rounded-3xl  p-6 flex flex-col h-full ">
+    <div className="bg-gray-200 rounded-3xl p-4 flex flex-col h-full ">
       <div className=" flex justify-between">
-        <h3 className="text-xl text-gray-800 mb-4 ">Todo List</h3>
+        <h3 className="text-md text-gray-800 mb-4 ">Todo List</h3>
         <Link href="/todos">
           <div className="bg-black rounded-full w-6 h-6 flex items-center justify-center hover:bg-orange-500 transition-colors">
             <FaArrowRight className="text-white -rotate-45" />
@@ -67,8 +67,11 @@ export default function TodoListWidget() {
         </ul>
       ) : (
         <div className="flex-grow flex flex-col justify-center items-center text-center text-gray-500">
-          <p>오늘의 할 일이 없네요!</p>
-          <p>할 일 페이지에서 새로운 할 일을 추가해보세요.</p>
+          <p className="text-sm">오늘의 할 일이 없네요!</p>
+          <hr></hr>
+          <p className="text-sm">
+            할 일 페이지에서 새로운 할 일을 추가해보세요.
+          </p>
         </div>
       )}
     </div>
