@@ -24,10 +24,10 @@ export default function Modal({ isOpen, onClose, children }: ModalProps) {
   return createPortal(
     <dialog
       ref={modalRef}
-      className="fixed inset-0 z-50 p-6 bg-white rounded-lg shadow-2xl backdrop:bg-black backdrop:opacity-50 w-[500px] max-w-[90%] flex items-center justify-center mb-6"
+      className="fixed inset-0 z-50 p-6 bg-white rounded-lg shadow-2xl backdrop:bg-black backdrop:opacity-50 w-[500px] max-w-[90%] flex flex-col items-center justify-center m-auto"
     >
       <div>
-        <div className="flex justify-end ">
+        <div className="flex justify-end w-full">
           <button
             onClick={onClose}
             className="text-gray-500 hover:text-gray-900"

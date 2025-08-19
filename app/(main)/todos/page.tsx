@@ -34,7 +34,7 @@ export default function TodosPage() {
       <div className="flex w-full justify-between items-center px-4 mb-4">
         <button
           onClick={() => setIsModalOpen(true)}
-          className="bg-orange-500 hover:bg-orange-600 text-white rounded-3xl mr-4 px-4 py-2"
+          className="bg-orange-500 hover:bg-orange-600 text-white text-xs rounded-3xl mr-4 px-3 py-2"
         >
           Add new
         </button>
