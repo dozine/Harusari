@@ -78,8 +78,8 @@ export default function WeeklyAchievement() {
   // }
 
   return (
-    <div className="bg-gray-200 rounded-3xl p-6 h-full flex flex-col">
-      <h3 className="flex flex-1 text-xl text-gray-900">Weekly Chart</h3>
+    <div className="bg-gray-200 rounded-3xl p-4 h-full flex flex-col">
+      <h3 className="flex flex-1 text-md text-gray-900">Weekly Chart</h3>
       <div className="flex-1">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
