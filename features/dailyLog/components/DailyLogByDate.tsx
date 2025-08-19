@@ -26,8 +26,8 @@ export default function DailyLogByDate({ date }: { date: string }) {
   }
 
   return (
-    <div className="p-6 max-w-2xl mx-auto bg-gray-200 rounded-3xl space-y-4 h-40 hover:bg-gray-300">
-      <div className="flex items-center justify-between border-b">
+    <div className="p-6 max-w-xl mx-auto bg-gray-200 rounded-3xl space-y-4 h-40 hover:bg-gray-300 w-full">
+      <div className="flex items-center justify-between">
         <h1 className="text-sm font-bold text-gray-900">{date}</h1>
       </div>
 

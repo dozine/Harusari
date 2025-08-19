@@ -12,8 +12,8 @@ export default function Sidebar() {
     logout();
   };
   return (
-    <aside className="p-4 flex flex-col h-full bg-gray-900 rounded-full justify-between items-center gap-6">
-      <div className="flex mt-2 mb-2 p-2 bg-orange-500 rounded-full aspect-square items-center justify-center">
+    <aside className="p-2 flex flex-col h-full bg-gray-900 rounded-full justify-between items-center gap-6">
+      <div className="flex mt-2 mb-2 p-1 bg-orange-500 rounded-full aspect-square items-center justify-center">
         {user && <p>{user.name[0]}</p>}
       </div>
       <nav className="space-y-10 overflow-y-auto">

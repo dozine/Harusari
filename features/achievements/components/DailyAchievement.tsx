@@ -32,9 +32,9 @@ export default function DailyAchievement() {
   const totalCount = achievement?.totalTasks ?? 0;
 
   return (
-    <div className="bg-gray-200 rounded-3xl p-6 flex flex-col h-full justify-center">
+    <div className="bg-gray-200 rounded-3xl p-4 flex flex-col h-full justify-center">
       <div className="flex items-center justify-between">
-        <h3 className="text-xl  text-gray-800">Achievement</h3>
+        <h3 className="text-md  text-gray-800">Achievement</h3>
       </div>
 
       <div className="flex flex-col items-center flex-grow justify-center text-center">
@@ -53,8 +53,7 @@ export default function DailyAchievement() {
           </>
         ) : (
           <div className="text-gray-500">
-            <FaClipboardList className="w-16 h-16 mb-2 mx-auto" />
-            <p className="text-lg">오늘의 할 일이 없습니다.</p>
+            <p className="text-sm">오늘의 할 일이 없습니다.</p>
           </div>
         )}
       </div>

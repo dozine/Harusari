@@ -42,7 +42,7 @@ export default function DailyLogPage() {
         <div className="mb-4">
           <button
             onClick={() => setIsModalOpen(true)}
-            className="bg-orange-500 hover:bg-orange-600 text-white rounded-3xl mr-4 px-4 py-2"
+            className="bg-orange-500 hover:bg-orange-600 text-white rounded-3xl mr-4 px-3 py-2 text-xs"
           >
             Add new
           </button>
