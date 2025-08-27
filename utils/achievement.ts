@@ -1,10 +1,17 @@
 import prisma from "./prisma";
 
 export const calculateAchievement = async (userId: string, date: Date) => {
+  const dateStr = date.toISOString().split("T")[0];
+  const startOfDay = new Date(dateStr + "T00:00:00.000Z");
+  const endOfDay = new Date(dateStr + "T23:59:59.999Z");
+
   const todos = await prisma.task.findMany({
     where: {
       userId: userId,
-      date: date,
+      date: {
+        gte: startOfDay,
+        lte: endOfDay,
+      },
     },
   });
 
@@ -14,7 +21,7 @@ export const calculateAchievement = async (userId: string, date: Date) => {
   const completionRate =
     totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
 
-  await prisma.achievement.upsert({
+  const result = await prisma.achievement.upsert({
     where: {
       userId_date: {
         userId: userId,
@@ -34,4 +41,5 @@ export const calculateAchievement = async (userId: string, date: Date) => {
       completedTasks: completedTasks,
     },
   });
+  return result;
 };
