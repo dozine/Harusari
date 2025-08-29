@@ -62,8 +62,6 @@ export async function PATCH(
     if (!originalTodo) {
       return NextResponse.json({ message: "Todo not found" }, { status: 404 });
     }
-
-    await calculateAchievement(userId, originalTodo.date);
     const updatedTodo = await prisma.task.update({
       where: {
         id: params.id,
@@ -71,7 +69,7 @@ export async function PATCH(
       },
       data: updateData,
     });
-
+    await calculateAchievement(userId, originalTodo.date);
     return NextResponse.json(updatedTodo, { status: 200 });
   } catch (error) {
     console.error("Error updating todo:", error);

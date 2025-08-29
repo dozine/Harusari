@@ -2,14 +2,6 @@
 
 import { useDailyLog } from "../hooks/hooks";
 
-const moodEmojis: Record<string, string> = {
-  very_happy: "😃",
-  happy: "🙂",
-  neutral: "😐",
-  sad: "🙁",
-  very_sad: "😭",
-};
-
 export default function DailyLogByDate({ date }: { date: string }) {
   const formattedDate = new Date(date).toISOString().split("T")[0];
   const { log, isLoading, error } = useDailyLog(formattedDate);
