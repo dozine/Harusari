@@ -2,11 +2,10 @@
 
 import React from "react";
 import { useAchievements } from "../hooks/useAchievementByDate";
-import { FaClipboardList } from "react-icons/fa";
 
 const today = new Date().toISOString().slice(0, 10);
 
-export default function DailyAchievement() {
+const DailyAchievement = () => {
   const { achievements, isLoading, error } = useAchievements(today);
 
   if (isLoading) {
@@ -59,4 +58,6 @@ export default function DailyAchievement() {
       </div>
     </div>
   );
-}
+};
+
+export default React.memo(DailyAchievement);

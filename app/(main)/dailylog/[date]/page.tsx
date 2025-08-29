@@ -28,7 +28,7 @@ export default function DailyLogDetailPage({
     return <div>로딩중</div>;
   }
   if (error) {
-    return <div>에러 발생 {error.Message}</div>;
+    return <div>에러 발생 {error.message}</div>;
   }
 
   if (!log) {

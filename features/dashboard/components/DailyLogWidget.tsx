@@ -2,12 +2,12 @@
 
 import { useDailyLog } from "@/features/dailyLog/hooks/hooks";
 import Link from "next/link";
-import React from "react";
+import React, { memo } from "react";
 import { FaArrowRight } from "react-icons/fa";
 
 const today = new Date().toISOString().slice(0, 10);
 
-export default function DailyLogWidget() {
+const DailyLogWidget = () => {
   const { log, isLoading, error } = useDailyLog(today);
 
   if (isLoading) {
@@ -63,4 +63,6 @@ export default function DailyLogWidget() {
       </p>
     </div>
   );
-}
+};
+
+export default memo(DailyLogWidget);
