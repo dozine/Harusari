@@ -1,9 +1,7 @@
 "use client";
 
-import { useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import { useAchievements } from "../hooks/useAchievements";
-import { DailyAchievementData } from "../types";
-import { Achievement } from "@prisma/client";
 import {
   CartesianGrid,
   Line,
@@ -14,7 +12,7 @@ import {
   YAxis,
 } from "recharts";
 
-export default function WeeklyAchievement() {
+const WeeklyAchievement = () => {
   const endDate = new Date();
   const startDate = new Date();
   startDate.setDate(endDate.getDate() - 6);
@@ -36,7 +34,7 @@ export default function WeeklyAchievement() {
       .sort((a, b) => (a.date > b.date ? 1 : -1));
   }, [achievements]);
 
-  const renderCustomizedLabel = (props: any) => {
+  const renderCustomizedLabel = useCallback((props: any) => {
     const { x, y, value } = props;
     return (
       <text
@@ -50,7 +48,7 @@ export default function WeeklyAchievement() {
         {`${value}%`}
       </text>
     );
-  };
+  }, []);
 
   if (isLoading) {
     return (
@@ -95,4 +93,6 @@ export default function WeeklyAchievement() {
       </div>
     </div>
   );
-}
+};
+
+export default React.memo(WeeklyAchievement);

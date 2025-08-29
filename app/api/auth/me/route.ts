@@ -1,11 +1,10 @@
 export const dynamic = "force-dynamic";
 
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
 import jwt, { Secret } from "jsonwebtoken";
 import { cookies } from "next/headers";
+import prisma from "@/utils/prisma";
 
-const prisma = new PrismaClient();
 const JWT_SECRET: Secret =
   process.env.JWT_SECRET || "your-super-secret-jwt-key";
 const COOKIE_NAME = process.env.COOKIE_NAME || "authToken";
@@ -73,7 +72,5 @@ export async function GET() {
       { message: "서버 내부 오류가 발생했습니다." },
       { status: 500 }
     );
-  } finally {
-    await prisma.$disconnect();
   }
 }

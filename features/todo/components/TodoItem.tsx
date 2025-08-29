@@ -2,14 +2,14 @@
 
 import { Todo } from "../types";
 import { useTodoById } from "../hooks/useTodos";
-import { useState } from "react";
+import { memo, useCallback, useState } from "react";
 import { FaEllipsis } from "react-icons/fa6";
 
 interface TodoItemProps {
   todo: Todo;
 }
 
-export default function TodoItem({ todo }: TodoItemProps) {
+const TodoItem = ({ todo }: TodoItemProps) => {
   const { updateTodo, removeTodo, isUpdating, isDeleting } = useTodoById(
     todo.id
   );
@@ -20,20 +20,20 @@ export default function TodoItem({ todo }: TodoItemProps) {
   );
   const [isSettingModal, setIsSettingModal] = useState(false);
 
-  const handleSettingModal = () => {
+  const handleSettingModal = useCallback(() => {
     setIsSettingModal(!isSettingModal);
-  };
+  }, []);
 
-  const handleToggle = () => {
+  const handleToggle = useCallback(() => {
     updateTodo({ isCompleted: !todo.isCompleted });
-  };
+  }, []);
 
-  const handleEdit = () => {
+  const handleEdit = useCallback(() => {
     setIsEditing(true);
     setIsSettingModal(false);
-  };
+  }, []);
 
-  const handleSave = () => {
+  const handleSave = useCallback(() => {
     if (
       editedTitle.trim() &&
       (editedTitle !== todo.title || editedDescription !== todo.description)
@@ -44,19 +44,20 @@ export default function TodoItem({ todo }: TodoItemProps) {
       });
     }
     setIsEditing(false);
-  };
-  const handleCancel = () => {
+  }, [editedTitle, editedDescription, updateTodo]);
+
+  const handleCancel = useCallback(() => {
     setEditedTitle(todo.title);
     setEditedDescription(todo.description || "");
     setIsEditing(false);
-  };
+  }, [todo.title, todo.description]);
 
-  const handleRemove = () => {
+  const handleRemove = useCallback(() => {
     setIsSettingModal(false);
     if (confirm("정말로 이 할일을 삭제하시겠습니까?")) {
       removeTodo();
     }
-  };
+  }, [removeTodo]);
 
   return (
     <div className="flex items-start justify-between p-4 bg-gray-200 rounded-3xl w-full max-w-[200px] h-40">
@@ -178,4 +179,6 @@ export default function TodoItem({ todo }: TodoItemProps) {
       </div>
     </div>
   );
-}
+};
+
+export default memo(TodoItem);

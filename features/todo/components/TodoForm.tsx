@@ -1,13 +1,12 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, memo, useState } from "react";
 
 interface TodoFormProps {
   onAddTodo: (data: { title: string; description?: string }) => void;
   isLoading?: boolean;
 }
-
-export default function TodoForm({ onAddTodo, isLoading }: TodoFormProps) {
+const TodoForm = ({ onAddTodo, isLoading }: TodoFormProps) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
@@ -56,4 +55,5 @@ export default function TodoForm({ onAddTodo, isLoading }: TodoFormProps) {
       </form>
     </div>
   );
-}
+};
+export default memo(TodoForm);
