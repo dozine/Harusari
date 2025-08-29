@@ -28,7 +28,6 @@ export function useTodosByDate(date: string) {
     queryKey: ["todos", date],
     queryFn: () => getTodosByDate(date),
     enabled: !!date,
-    retry: 1,
   });
 
   const createTodoMutation = useMutation({
@@ -57,9 +56,12 @@ export function useTodoById(id: string) {
     mutationFn: (data: UpdateTodoData) => updateTodo(id, data),
     onSuccess: (updatedTodo) => {
       if (updatedTodo.date) {
-        const dateString = updatedTodo.date.split("T")[0]; // YYYY-MM-DD 형식으로 변환
+        const dateString = updatedTodo.date.split("T")[0];
         queryClient.invalidateQueries({ queryKey: ["todos", dateString] });
       }
+    },
+    onError: (error) => {
+      console.error("Failed to update todo:", error);
     },
   });
 
@@ -69,6 +71,9 @@ export function useTodoById(id: string) {
       queryClient.invalidateQueries({
         predicate: (query) => query.queryKey[0] === "todos",
       });
+    },
+    onError: (error) => {
+      console.error("Failed to delete todo:", error);
     },
   });
 

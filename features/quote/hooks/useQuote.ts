@@ -11,6 +11,7 @@ export default function useQuote() {
   } = useQuery({
     queryKey: ["quote"],
     queryFn: getTodayQuote,
+    staleTime: 1000 * 60 * 60 * 12,
   });
   return { quote, isLoading, error };
 }
