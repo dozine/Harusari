@@ -14,29 +14,17 @@ export default function ProtectedRoute({
   children,
   redirectTo = "/login",
 }: ProtectedRouteProps) {
-  const { isAuthenticated, isLoading } = useAuthStore();
-  const { checkAuth } = useAuth();
+  const { checkAuth, isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
   const [hasChecked, setHasChecked] = useState(false);
 
   useEffect(() => {
-    const initAuth = async () => {
-      if (!hasChecked) {
-        await checkAuth();
-        setHasChecked(true);
-      }
-    };
-
-    initAuth();
-  }, [checkAuth, hasChecked]);
-
-  useEffect(() => {
-    if (hasChecked && !isLoading && !isAuthenticated) {
-      router.replace(redirectTo);
+    if (!isLoading && !isAuthenticated) {
+      checkAuth();
     }
-  }, [isAuthenticated, isLoading, hasChecked, router, redirectTo]);
+  }, [checkAuth, isAuthenticated, isLoading]);
 
-  if (!hasChecked || isLoading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-sky-600"></div>

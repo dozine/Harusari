@@ -5,23 +5,20 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { usePathname } from "next/navigation";
 
-interface AppProviderProps {
+const queryClientInstance = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
+
+interface AuthProviderWrapperProps {
   children: React.ReactNode;
 }
 
-export function Provider({ children }: AppProviderProps) {
-  const [queryClient] = useState(
-    () =>
-      new QueryClient({
-        defaultOptions: {
-          queries: {
-            retry: false,
-            refetchOnWindowFocus: false,
-          },
-        },
-      })
-  );
-
+function AuthProviderWrapper({ children }: AuthProviderWrapperProps) {
   const { checkAuth, isLoading } = useAuth();
   const [authCheckedOnLoad, setAuthCheckedOnLoad] = useState(false);
   const pathname = usePathname();
@@ -35,7 +32,8 @@ export function Provider({ children }: AppProviderProps) {
       setAuthCheckedOnLoad(true);
       return;
     }
-    if (!authCheckedOnLoad) {
+
+    if (!authCheckedOnLoad && !isLoading) {
       console.log(
         "AppProvider: Protected path, performing initial auth check..."
       );
@@ -46,9 +44,15 @@ export function Provider({ children }: AppProviderProps) {
       };
       performAuthCheck();
     }
-  }, [checkAuth, authCheckedOnLoad, pathname]);
+  }, [checkAuth, authCheckedOnLoad, pathname, isLoading]);
 
+  return <>{children}</>;
+}
+
+export function Provider({ children }: { children: React.ReactNode }) {
   return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <QueryClientProvider client={queryClientInstance}>
+      <AuthProviderWrapper>{children}</AuthProviderWrapper>
+    </QueryClientProvider>
   );
 }
