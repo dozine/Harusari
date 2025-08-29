@@ -19,19 +19,10 @@ export default function WeeklyAchievement() {
   const startDate = new Date();
   startDate.setDate(endDate.getDate() - 6);
 
-  // const { achievements, isLoading, error } = useAchievements(
-  //   startDate.toISOString().slice(0, 10),
-  //   endDate.toISOString().slice(0, 10)
-  // );
-  const achievements = [
-    { date: "2025-08-03T00:00:00.000Z", completionRate: 70 },
-    { date: "2025-08-04T00:00:00.000Z", completionRate: 85 },
-    { date: "2025-08-05T00:00:00.000Z", completionRate: 30 },
-    { date: "2025-08-06T00:00:00.000Z", completionRate: 90 },
-    { date: "2025-08-07T00:00:00.000Z", completionRate: 33 },
-    { date: "2025-08-08T00:00:00.000Z", completionRate: 100 },
-    { date: "2025-08-09T00:00:00.000Z", completionRate: 80 },
-  ];
+  const { achievements, isLoading, error } = useAchievements(
+    startDate.toISOString().slice(0, 10),
+    endDate.toISOString().slice(0, 10)
+  );
 
   const data = useMemo(() => {
     return achievements
@@ -50,7 +41,7 @@ export default function WeeklyAchievement() {
     return (
       <text
         x={x}
-        y={y - 15} // 너무 높이 띄우지 않기
+        y={y - 15}
         fill="#ff7f50"
         fontWeight="bold"
         fontSize={12}
@@ -61,21 +52,21 @@ export default function WeeklyAchievement() {
     );
   };
 
-  // if (isLoading) {
-  //   return (
-  //     <div className="bg-white rounded-2xl shadow p-4 flex justify-center items-center h-64">
-  //       로딩 중...
-  //     </div>
-  //   );
-  // }
+  if (isLoading) {
+    return (
+      <div className="bg-white rounded-2xl shadow p-4 flex justify-center items-center h-64">
+        로딩 중...
+      </div>
+    );
+  }
 
-  // if (error) {
-  //   return (
-  //     <div className="bg-white rounded-2xl shadow p-4 flex justify-center items-center h-64 text-red-500">
-  //       데이터 불러오기 실패
-  //     </div>
-  //   );
-  // }
+  if (error) {
+    return (
+      <div className="bg-white rounded-2xl shadow p-4 flex justify-center items-center h-64 text-red-500">
+        데이터 불러오기 실패
+      </div>
+    );
+  }
 
   return (
     <div className="bg-gray-200 rounded-3xl p-4 h-full flex flex-col">
