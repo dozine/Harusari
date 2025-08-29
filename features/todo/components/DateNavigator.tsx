@@ -1,34 +1,43 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
-import { useMemo } from "react";
+import { memo, useCallback, useMemo } from "react";
 
-export default function DateNavigator() {
+const DateNavigator = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const dateParam = searchParams.get("date");
 
-  const getFormattedDate = (daysAgo: number) => {
+  const getFormattedDate = useCallback((daysAgo: number) => {
     const d = new Date();
     d.setDate(d.getDate() - daysAgo);
     return d.toISOString().split("T")[0];
-  };
+  }, []);
 
   const today = useMemo(() => getFormattedDate(0), []);
   const date = dateParam || today;
 
-  const changeDate = (newDate: string) => {
-    router.push(`/todos?date=${newDate}`);
-  };
-  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    changeDate(e.target.value);
-  };
-  const getButtonClass = (buttonDate: string) =>
-    `hidden sm:block px-4 py-2 rounded-full text-xs font-medium transition-colors ${
-      date === buttonDate
-        ? "bg-orange-500 text-white"
-        : "bg-gray-200 text-gray-500 hover:bg-gray-300"
-    }`;
+  const changeDate = useCallback(
+    (newDate: string) => {
+      router.push(`/todos?date=${newDate}`);
+    },
+    [router]
+  );
+  const handleDateChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      changeDate(e.target.value);
+    },
+    [changeDate]
+  );
+  const getButtonClass = useCallback(
+    (buttonDate: string) =>
+      `hidden sm:block px-4 py-2 rounded-full text-xs font-medium transition-colors ${
+        date === buttonDate
+          ? "bg-orange-500 text-white"
+          : "bg-gray-200 text-gray-500 hover:bg-gray-300"
+      }`,
+    [date]
+  );
 
   return (
     <div className="flex items-center space-x-4 mb-4 mt-8">
@@ -66,4 +75,6 @@ export default function DateNavigator() {
       </div>
     </div>
   );
-}
+};
+
+export default memo(DateNavigator);

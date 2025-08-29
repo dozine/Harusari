@@ -1,4 +1,5 @@
 "use client";
+import { memo } from "react";
 import { useDailyLogs } from "../hooks/hooks";
 import { DailyLog } from "../types";
 import DailyLogByDate from "./DailyLogByDate";
@@ -12,7 +13,7 @@ const moodEmojis: Record<string, string> = {
   very_sad: "😭",
 };
 
-export default function DailyLogList() {
+const DailyLogList = () => {
   const { data: dailyLogs, isLoading, error } = useDailyLogs();
   if (isLoading) return <div>로딩 중 ...</div>;
   if (error) return <div>에러가 발생했습니다.</div>;
@@ -31,4 +32,6 @@ export default function DailyLogList() {
     </div>
   );
   1;
-}
+};
+
+export default memo(DailyLogList);

@@ -1,8 +1,9 @@
 "use client";
 
+import { memo } from "react";
 import { useDailyLog } from "../hooks/hooks";
 
-export default function DailyLogByDate({ date }: { date: string }) {
+const DailyLogByDate = ({ date }: { date: string }) => {
   const formattedDate = new Date(date).toISOString().split("T")[0];
   const { log, isLoading, error } = useDailyLog(formattedDate);
 
@@ -30,4 +31,5 @@ export default function DailyLogByDate({ date }: { date: string }) {
       </div>
     </div>
   );
-}
+};
+export default memo(DailyLogByDate);
