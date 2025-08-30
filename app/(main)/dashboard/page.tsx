@@ -1,13 +1,4 @@
 "use client";
-
-import DailyAchievement from "@/features/achievements/components/DailyAchievement";
-import WeeklyAchievement from "@/features/achievements/components/WeeklyAchievement";
-import DailyLogWidget from "@/features/dashboard/components/DailyLogWidget";
-import MoodWidget from "@/features/dashboard/components/MoodWidget";
-import QuoteWidget from "@/features/dashboard/components/QuoteWidget";
-import TodoListWidget from "@/features/dashboard/components/TodoListWidget";
-import WeatherWidget from "@/features/dashboard/components/WeatherWidget";
-import MonthlyAchievement from "@/features/achievements/components/MonthlyAchievement";
 import dynamic from "next/dynamic";
 
 const DynamicQuoteWidget = dynamic(
@@ -121,10 +112,10 @@ export default function DashboardPage() {
       </div>
 
       <div className="col-span-1 sm:col-span-1 sm:row-span-2 md:col-span-1 md:row-span-2 flex flex-col gap-4 min-h-[400px] sm:min-h-[300px]">
-        <div className="flex-1 min-h-[100px]">
+        <div className="flex-1 h-full">
           <DynamicDailyAchievement />
         </div>
-        <div className="flex-1 min-h-[100px]">
+        <div className="flex-1 h-full">
           <DynamicDailyLogWidget />
         </div>
       </div>
