@@ -1,16 +1,28 @@
 "use client";
 
-import React, { useCallback, useMemo } from "react";
+import React, { useMemo } from "react";
 import { useAchievements } from "../hooks/useAchievements";
+import { Line } from "react-chartjs-2";
 import {
-  CartesianGrid,
-  Line,
-  LineChart,
-  ResponsiveContainer,
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
   Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
+  Legend,
+} from "chart.js";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const WeeklyAchievement = () => {
   const endDate = new Date();
@@ -22,8 +34,8 @@ const WeeklyAchievement = () => {
     endDate.toISOString().slice(0, 10)
   );
 
-  const data = useMemo(() => {
-    return achievements
+  const chartData = useMemo(() => {
+    const dataPoints = achievements
       .map((item) => ({
         date:
           typeof item.date === "string"
@@ -32,23 +44,55 @@ const WeeklyAchievement = () => {
         completionRate: Math.round(item.completionRate),
       }))
       .sort((a, b) => (a.date > b.date ? 1 : -1));
-  }, [achievements]);
 
-  const renderCustomizedLabel = useCallback((props: any) => {
-    const { x, y, value } = props;
-    return (
-      <text
-        x={x}
-        y={y - 15}
-        fill="#ff7f50"
-        fontWeight="bold"
-        fontSize={12}
-        textAnchor="middle"
-      >
-        {`${value}%`}
-      </text>
-    );
-  }, []);
+    return {
+      labels: dataPoints.map((item) => item.date),
+      datasets: [
+        {
+          label: "Completion Rate",
+          data: dataPoints.map((item) => item.completionRate),
+          borderColor: "#ff7f50",
+          backgroundColor: "rgba(255, 127, 80, 0.5)",
+          pointRadius: 5,
+          pointHoverRadius: 7,
+          tension: 0.4,
+        },
+      ],
+    };
+  }, [achievements]);
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false,
+      },
+      tooltip: {
+        callbacks: {
+          label: function (context: any) {
+            return `${context.dataset.label}: ${context.raw}%`;
+          },
+        },
+      },
+    },
+    scales: {
+      x: {
+        grid: {
+          display: false,
+        },
+        ticks: {
+          color: "#000",
+        },
+      },
+      y: {
+        grid: {
+          display: false,
+        },
+        min: 0,
+        max: 100,
+      },
+    },
+  };
 
   if (isLoading) {
     return (
@@ -69,27 +113,8 @@ const WeeklyAchievement = () => {
   return (
     <div className="bg-gray-200 rounded-3xl p-4 h-full flex flex-col">
       <h3 className="flex flex-1 text-md text-gray-900">Weekly Chart</h3>
-      <div className="flex-1">
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart
-            data={data}
-            margin={{ top: 30, right: 20, left: 20, bottom: 20 }}
-          >
-            {/* <CartesianGrid strokeDasharray="3 3" /> */}
-            {/* <XAxis dataKey="date" /> */}
-            {/* <YAxis domain={[0, 100]} tickFormatter={(value) => `${value}%`} /> */}
-            <Tooltip formatter={(value) => `${value}%`} />
-            <Line
-              type="monotone"
-              dataKey="completionRate"
-              stroke="#ff7f50"
-              strokeWidth={3}
-              dot={{ r: 5 }}
-              activeDot={{ r: 7 }}
-              label={renderCustomizedLabel}
-            />
-          </LineChart>
-        </ResponsiveContainer>
+      <div className="flex-1 min-h-[100px] sm:min-h-[100px]">
+        <Line data={chartData} options={chartOptions} />
       </div>
     </div>
   );
