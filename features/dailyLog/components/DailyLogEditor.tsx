@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { memo, useCallback, useState } from "react";
 import MoodSelector from "./moodSelector";
 
 type Props = {
@@ -9,22 +9,28 @@ type Props = {
   isSaving: boolean;
 };
 
-export default function DailyLogEditor({ date, onSave, isSaving }: Props) {
+const DailyLogEditor = ({ date, onSave, isSaving }: Props) => {
   const [content, setContent] = useState("");
   const [selectedMood, setSelectedMood] = useState<{
     mood: string;
     moodComment: string;
   } | null>(null);
 
-  const handleSave = () => {
+  const handleSave = useCallback(() => {
     if (selectedMood && content.trim()) {
       onSave(selectedMood.mood, selectedMood.moodComment, content);
     }
-  };
+  }, [content, onSave, selectedMood]);
 
+  const handleSelectMood = useCallback(
+    (mood: { mood: string; moodComment: string }) => {
+      setSelectedMood(mood);
+    },
+    []
+  );
   return (
     <div className="flex flex-col gap-4 justify-center items-center">
-      <MoodSelector onSelectMood={setSelectedMood} />
+      <MoodSelector onSelectMood={handleSelectMood} />
       <div className="w-full">
         <label className="block text-sm font-medium text-gray-700 mb-6">
           일기 내용
@@ -47,4 +53,6 @@ export default function DailyLogEditor({ date, onSave, isSaving }: Props) {
       </button>
     </div>
   );
-}
+};
+
+export default memo(DailyLogEditor);

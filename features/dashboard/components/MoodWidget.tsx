@@ -1,14 +1,12 @@
-// features/dashboard/components/MoodWidget.tsx
-
 "use client";
 
 import { useDailyLog } from "@/features/dailyLog/hooks/hooks";
 import Link from "next/link";
-import React from "react";
+import React, { memo } from "react";
 
 const today = new Date().toISOString().slice(0, 10);
 
-export default function MoodWidget() {
+const MoodWidget = () => {
   const { log, isLoading, error } = useDailyLog(today);
 
   if (isLoading) {
@@ -54,4 +52,6 @@ export default function MoodWidget() {
       </Link>
     </div>
   );
-}
+};
+
+export default memo(MoodWidget);

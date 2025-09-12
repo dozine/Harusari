@@ -14,7 +14,7 @@ export const useDailyLogs = () => {
   return useQuery({
     queryKey: ["dailyLogs"],
     queryFn: getDailyLog,
-    staleTime: 5 * 60 * 1000,
+    staleTime: 1000 * 60 * 60 * 12,
   });
 };
 
@@ -24,10 +24,7 @@ export const useDailyLog = (date: string) => {
     queryKey: ["dailyLog", date],
     queryFn: () => getDailyLogByDate(date),
     enabled: !!date,
-    retry: (failureCount, error: any) => {
-      if (error?.response?.status === 404) return false;
-      return failureCount < 3;
-    },
+    staleTime: 1000 * 60 * 60 * 12,
   });
   const createMutation = useMutation({
     mutationFn: createDailyLog,

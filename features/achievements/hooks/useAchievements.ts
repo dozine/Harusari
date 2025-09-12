@@ -13,6 +13,7 @@ export function useAchievements(startDate: string, endDate: string) {
     queryKey: ["achievements", startDate, endDate],
     queryFn: () => getAchievements(startDate, endDate),
     enabled: !!startDate && !!endDate,
+    staleTime: 1000 * 60 * 60 * 6,
   });
 
   return { achievements, isLoading, error };

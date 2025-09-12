@@ -30,9 +30,7 @@ const getDatesForLastMonth = (month = 3) => {
   return { startDate, endDate };
 };
 
-export default memo(AchievementHeatmap);
-
-function AchievementHeatmap() {
+const AchievementHeatmap = () => {
   const { startDate, endDate } = useMemo(() => getDatesForLastMonth(3), []);
   const {
     achievements = [],
@@ -154,4 +152,5 @@ function AchievementHeatmap() {
       </div>
     </div>
   );
-}
+};
+export default memo(AchievementHeatmap);

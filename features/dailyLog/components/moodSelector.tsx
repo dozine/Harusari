@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { memo, useCallback, useState } from "react";
 
 const moodCategories: Record<string, string[]> = {
   "😄 긍정": [
@@ -45,18 +45,30 @@ type Props = {
   onSelectMood: (mood: { mood: string; moodComment: string }) => void;
 };
 
-export default function MoodSelector({ onSelectMood }: Props) {
+const MoodSelector = ({ onSelectMood }: Props) => {
   const categoryKeys = Object.keys(moodCategories);
   const [selectedCategory, setSelectedCategory] = useState(categoryKeys[0]);
   const [selectedMood, setSelectedMood] = useState("");
   const [selectedMoodComment, setSelectedMoodComment] = useState("");
 
-  const handleMoodSelect = (mood: string) => {
-    setSelectedMood(mood);
-    setSelectedMoodComment(mood);
-    onSelectMood({ mood, moodComment: mood });
-  };
+  const handleMoodSelect = useCallback(
+    (mood: string) => {
+      setSelectedMood(mood);
+      setSelectedMoodComment(mood);
+      onSelectMood({ mood, moodComment: mood });
+    },
+    [onSelectMood]
+  );
 
+  const handleCategorySelect = useCallback(
+    (cat: string) => {
+      setSelectedCategory(cat);
+      setSelectedMood("");
+      setSelectedMoodComment("");
+      onSelectMood({ mood: "", moodComment: "" });
+    },
+    [onSelectMood]
+  );
   return (
     <div className="flex flex-col gap-6">
       <h2 className="text-lg font-bold text-gray-800">
@@ -66,7 +78,7 @@ export default function MoodSelector({ onSelectMood }: Props) {
         {categoryKeys.map((cat) => (
           <button
             key={cat}
-            onClick={() => setSelectedCategory(cat)}
+            onClick={() => handleCategorySelect(cat)}
             className={`px-4 py-2 rounded-full border transition-all duration-200
               ${
                 selectedCategory === cat
@@ -102,4 +114,5 @@ export default function MoodSelector({ onSelectMood }: Props) {
       )}
     </div>
   );
-}
+};
+export default memo(MoodSelector);

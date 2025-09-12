@@ -1,9 +1,9 @@
 "use client";
 
 import useQuote from "@/features/quote/hooks/useQuote";
-import React from "react";
+import React, { memo } from "react";
 
-export default function QuoteWidget() {
+const QuoteWidget = () => {
   const { quote, isLoading, error } = useQuote();
 
   if (isLoading) {
@@ -44,4 +44,6 @@ export default function QuoteWidget() {
       <p className="text-gray-500">명언 정보가 없습니다.</p>
     </div>
   );
-}
+};
+
+export default memo(QuoteWidget);

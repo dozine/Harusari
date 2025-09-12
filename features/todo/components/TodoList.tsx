@@ -2,12 +2,13 @@
 
 import TodoItem from "./TodoItem";
 import { Todo } from "../types";
+import { memo } from "react";
 
 interface TodoListProps {
   todos: Todo[];
 }
 
-export default function TodoList({ todos }: TodoListProps) {
+const TodoList = ({ todos }: TodoListProps) => {
   return (
     <div className="flex flex-col gap-4 w-full">
       {todos.length === 0 ? (
@@ -23,4 +24,6 @@ export default function TodoList({ todos }: TodoListProps) {
       )}
     </div>
   );
-}
+};
+
+export default memo(TodoList);
