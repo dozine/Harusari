@@ -10,16 +10,27 @@ const DailyAchievement = () => {
 
   if (isLoading) {
     return (
-      <div className="bg-white rounded-lg shadow p-6 flex flex-col justify-center items-center h-full">
-        <p className="text-gray-500">데이터를 가져오는 중...</p>
+      <div className="bg-gray-200 rounded-3xl p-4 flex flex-col h-full justify-center">
+        <div className="flex items-center justify-between">
+          <h3 className="text-md text-gray-800">Achievement</h3>
+        </div>
+        <div className="flex flex-col items-center flex-grow justify-center text-center">
+          <div className="w-16 h-16 bg-gray-300 rounded-full animate-pulse mb-2" />
+          <p className="w-24 h-4 bg-gray-300 rounded animate-pulse mt-5" />
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="bg-white rounded-lg shadow p-6 flex flex-col justify-center items-center h-full">
-        <p className="text-red-500">데이터를 가져오는 데 실패했습니다.</p>
+      <div className="bg-gray-200 rounded-3xl p-4 flex flex-col h-full justify-center">
+        <div className="flex items-center justify-between">
+          <h3 className="text-md text-gray-800">Achievement</h3>
+        </div>
+        <div className="flex flex-col items-center flex-grow justify-center text-center">
+          <p className="text-red-500">데이터를 가져오는 데 실패했습니다.</p>
+        </div>
       </div>
     );
   }
